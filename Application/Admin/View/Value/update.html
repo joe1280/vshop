@@ -1,0 +1,41 @@
+
+<div class="pageContent">
+    <form method="post" action="__SELF__">  
+
+        <div class="pageFormContent" layoutH="60">
+
+
+            <dl>
+                <dt>属性值名称:</dt>
+                <dd><input type="text" class="required"  style="width:100%" name="value_name" value="<?php echo $value_info['value_name']; ?>"/></dd>
+                
+                <dd>  
+                    
+                  <select name='attr_id'>
+                    <option value="">请选择属性</option>
+                    <?php foreach($attr_list as $k=>$v):
+                        if($v['id']==$value_info['attr_id'])
+                        $selected="selected='selected'";
+                        else
+                        $selected=''
+                    ?>
+                    <option <?php echo $selected;?> value="<?php echo $v['id'];?>"><?php echo $v['attr_name']; ?></option>
+                    <?php endforeach;?>
+                </select>
+
+                </dd>
+            </dl>
+         
+            
+           
+        </div>
+
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+</div>
+
