@@ -5,9 +5,11 @@ class AttrController extends IndexController{
     
     public function add(){
         if(IS_POST){
+           // show_bug($_POST);die;
             $attrModel=D('Attr');
             if($attrModel->create()){
-                     $this->attr_name=I('post.attr_name');
+                   $attr_value= trim(str_replace('，',',',I('post.attr_value')));
+                   $attrModel->attr_value=$attr_value;
                         if($attrModel->add()){
                             $this->success('添加成功',U('lst'));
                                 exit;
@@ -18,7 +20,11 @@ class AttrController extends IndexController{
             $this->error($attrModel->getError());
             
         }
-       
+       //取出所有商品类型
+        $TypeModel=D('Type');
+        $type_list=$TypeModel->select();
+        $this->assign('type_list',$type_list);
+        
         $this->display();
     }
     
@@ -28,8 +34,11 @@ class AttrController extends IndexController{
         
         //取出所有属性
         $attrModel=D('Attr');
-        $attr_list=$attrModel->select();
-    
+        
+        $sql=
+      
+        //$sql='SELECT * FROM v_attr a LEFT JOIN v_type b ON a.type_id=b.id ';
+      $attr_list=$attrModel->alias('a')->field('a.*,b.type_name')->join(' LEFT JOIN v_type b ON a.type_id=b.id')->select();
         $this->assign('attr_list',$attr_list);
         $this->display();
     }
@@ -37,8 +46,8 @@ class AttrController extends IndexController{
               $attrModel=D('Attr');
                 if(IS_POST){
                         if($attrModel->create()){
-                                $attrModel->id=I('post.id');
-                                $attrModel->attr_name=I('post.attr_name');
+                               $attr_value= trim(str_replace('，',',',I('post.attr_value')));
+                              $attrModel->attr_value=$attr_value;
                                 if($attrModel->save()!==FALSE){
                                     $this->success('修改成功',U('lst'));
                                         exit;
@@ -49,9 +58,20 @@ class AttrController extends IndexController{
                     
                 }
                 
-          
+                        //取出所有商品类型
+               $TypeModel=D('Type');
+               $type_list=$TypeModel->select();
+              
+
+                //取出要修改的属性
                 $attr_info=$attrModel->find($id);
-                $this->assign('attr_info',$attr_info);
+                
+              
+                $this->assign(array(
+                    'type_list'=>$type_list,
+                    'attr_info'=>$attr_info,
+                    
+                ));
         $this->display();
     }
     public function del($id){

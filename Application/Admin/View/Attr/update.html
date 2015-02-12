@@ -1,25 +1,55 @@
 
 <div class="pageContent">
-	<form method="post" action="__SELF__">  
-            <input type='hidden' name='id' value="<?php echo I('get.id');?>"/>
+    <form method="post" action="__SELF__">  
+        <input type="hidden" name='id' value=<?php echo I('get.id');?> />
+        <div class="pageFormContent" layoutH="60">
+
+
+            <dl>
+                <dt>属性名称:</dt>
+                <dd><input type="text" class="required"  style="width:100%" name="attr_name" value="<?php echo $attr_info['attr_name'];?>"/></dd>
                       
-		
-		<div class="pageFormContent" layoutH="60">
-			
-			
-			<dl>
-				<dt>属性名称:</dt>
-                                <dd><input type="text" class="required"  style="width:100%" name="attr_name" value="<?php echo $attr_info['attr_name']; ?>"/></dd>
-			</dl>
-			
-		</div>
-		
-		<div class="formBar">
-			<ul>
-				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
-				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
-			</ul>
-		</div>
-	</form>
+            </dl>
+           
+                 <dl>
+                <dt>属性类型:</dt>
+                <dd><input type='radio' name='attr_type' value='唯一' <?php if($attr_info['attr_type']=='唯一') echo 'checked';?> /> 唯一 <input type='radio'  name='attr_type' value='单选' <?php if($attr_info['attr_type']=='单选') echo 'checked';?>/>单选</dd>
+             
+            </dl>
+            
+                 <dl>
+                <dt>商品类型:</dt>
+                <dd>
+                <select name='type_id'>
+                    <option value="">选择商品类型</option>
+                    <?php foreach($type_list as $k=>$v):
+                        if($v['id']==$attr_info['type_id'])
+                       $sel="selected='selected'";
+                        else
+                        $sel='';
+                    ?>
+                    <option <?php echo $sel; ?> value="<?php echo $v['id'];?>" ><?php echo $v['type_name'];?></option>
+                    <?php endforeach;?>
+                </select>
+                    
+                </dd>
+                      
+            </dl>
+            
+               <dl>
+                <dt>属性可选值:</dt>
+                <dd><textarea  cols="50"  rows="5" name='attr_value'><?php echo $attr_info['attr_value'];?></textarea></dd>
+                 </dl>           
+      
+
+        </div>
+
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
 </div>
 

@@ -1,0 +1,35 @@
+
+<div class="pageContent">
+    <form method="post" action="__SELF__" enctype="multipart/form-data" >  
+        <input type='hidden' name='id' value="<?php echo I('get.id');?>"/>
+        <input type="hidden" name='old_logo' value="<?php echo $brand_info['logo'];?>"/>
+
+        <div class="pageFormContent" layoutH="60">
+
+
+            <dl>
+                <dt>品牌名称:</dt>
+                <dd><input type="text" class="required"  style="width:100%" name="brand_name" value="<?php echo $brand_info['brand_name'];?>"/></dd>
+                
+             
+            </dl>
+         
+            <dl>
+                <dt>品牌logo:</dt>
+                <dd><input type="file" class="required"  style="width:100%" name="logo"/><img src="<?php echo UP.$brand_info['logo'];?>"/></dd>
+                
+             
+            </dl>
+            
+           
+        </div>
+
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+</div>
+

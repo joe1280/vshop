@@ -11,6 +11,31 @@
                       
             </dl>
            
+                 <dl>
+                <dt>属性类型:</dt>
+                <dd><input type='radio' name='attr_type' value='唯一' /> 唯一 <input type='radio'  name='attr_type' value='单选' />单选</dd>
+             
+            </dl>
+            
+                 <dl>
+                <dt>商品类型:</dt>
+                <dd>
+                <select name='type_id'>
+                    <option value="">选择商品类型</option>
+                    <?php foreach($type_list as $k=>$v):?>
+                    <option value="<?php echo $v['id'];?>"><?php echo $v['type_name'];?></option>
+                    <?php endforeach;?>
+                </select>
+                    
+                </dd>
+                      
+            </dl>
+            
+               <dl>
+                <dt>属性可选值:</dt>
+                <dd><textarea cols="50" rows="5" name='attr_value'></textarea></dd>
+                 </dl>           
+      
 
         </div>
 
