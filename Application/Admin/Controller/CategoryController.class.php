@@ -10,7 +10,8 @@ class CategoryController extends IndexController{
          
             if($categoryModel->create()){
                
-                                    $categoryModel->cat_name=I('post.cat_name');
+                                 $attr_id=  implode(',', array_unique(I('post.attr_id')));
+                                 $categoryModel->attr_id=$attr_id;
                                     $categoryModel->pid=(int)I('post.pid');
                                     
                         if($categoryModel->add()){
@@ -23,13 +24,20 @@ class CategoryController extends IndexController{
             $this->error($categoryModel->getError());
             
         }
+        
+        //取出所有类型
+        $typeModel=D('Type');
+        $type_list=$typeModel->select();
        //取出分类属性
    
        $category_list=$categoryModel->select();
   
        $category_list=$categoryModel->catSort($category_list);
       
-        $this->assign('category_list',$category_list);
+        $this->assign(array(
+            'type_list'=>$type_list,
+            'category_list'=>$category_list,
+        ));
         $this->display();
     }
     
@@ -57,14 +65,16 @@ class CategoryController extends IndexController{
                     
                         if($categoryModel->create()){
                            
-                                $categoryModel->id=I('post.id');
-                                 $categoryModel->cat_name=I('post.cat_name');
-                             $categoryModel->pid=(int)I('post.pid');
+                                   $attr_id=  implode(',', array_unique(I('post.attr_id')));
+                                 $categoryModel->attr_id=$attr_id;
+                                    $categoryModel->pid=(int)I('post.pid');
+                              
                            
                                 if($categoryModel->save()!==FALSE){
                                     $this->success('修改成功',U('lst'));
                                         exit;
                                 }
+                               
                                 $this->error('修改失败',U('lst'));
                         }   
                         $this->error($categoryModel->getError());
@@ -73,22 +83,33 @@ class CategoryController extends IndexController{
                 
                     //取分类
                 $category_info=$categoryModel->find($id);
-                $this->assign('category_info',$category_info);
+    
                 
-                
-       //取出分类属性
+                //取出分类对应的属性
+                $attrModel=D('Attr');
+                $attr_info=$attrModel->where('id IN('.$category_info['attr_id'].')')->select();
+              
+               
+       //取出分类
                 
    
           $category_list=$categoryModel->select();
        
        $category_list=$categoryModel->catSort($category_list);
    
-       //取出所有子类ID
-       $cat_ids=$categoryModel->childSort($category_list,$id);
-       $cat_ids[]=$id;
+    
+       //取出所有类型
+        $typeModel=D('Type');
+        $type_list=$typeModel->select();
+       //取出分类属性
       
-       $this->assign('cat_ids',$cat_ids);
-        $this->assign('category_list',$category_list);
+      
+        $this->assign(array(
+            'category_info'=>$category_info,
+            'category_list'=>$category_list,
+            'type_list'=>$type_list,
+            'attr_info'=>$attr_info,
+        ));
         $this->display();
     }
     public function del($id){
@@ -113,6 +134,15 @@ class CategoryController extends IndexController{
                 
             }
               $this->error('删除失败');
+    }
+    //ajax 获取属性
+    public function ajaxGetAttr($type_id){
+        
+        //取出属性
+        $attrModel=D('Attr');
+       $attr_info=$attrModel->where('type_id='.$type_id)->select();
+      echo  json_encode($attr_info);
+       
     }
     
 }

@@ -1,7 +1,7 @@
-
+<script type='text/javascript' src='__PUBLIC__/Jquery/jquery-1.7.2.js'></script>
 <div class="pageContent">
     <form method="post" action="__SELF__">  
-        <input type='hidden' name='id' value="<?php echo I('get.id');?>"/>
+        <input type='hidden' name='id'  value="<?php echo I('get.id');?>"/>  
         <div class="pageFormContent" layoutH="60">
 
 
@@ -13,23 +13,65 @@
                     
                   <select name='pid'>
                     <option value="0">上级分类</option>
-                    <?php foreach($category_list as $k=>$v):
-                      if($v['id']==$category_info['pid'])
-                      $selected="selected='selected'";
-                      else
-                      $selected='';
-                    if(in_array($v['id'],$cat_ids))
-                    continue;
-                        
-                     
-                    
-                     
-                    ?>
-                    <option <?php echo $selected; ?> value="<?php echo $v['id'];?>"><?php echo str_repeat('&nbsp;',($v['level'])*5).$v['cat_name'];?></option>
+                    <?php foreach($category_list as $k=>$v):?>
+                    <option value="<?php echo $v['id'];?>"><?php echo str_repeat('&nbsp;',($v['level'])*5).$v['cat_name'];?></option>
                     <?php endforeach;?>
                 </select>
 
                 </dd>
+                
+                <dt>价格区间</dt>
+                <dd><input type="text" class="required"  style="width:100%" name="section_price"  value="<?php echo $category_info['section_price'];?>"/></dd>
+                
+                <dt>分类关键字</dt>
+                <dd><input type='text' name='keyword' style="width:100%" value="<?php echo $category_info['keyword'];?>"/></dd>
+                  <dt>分类描述</dt>
+                  <dd><textarea cols="50" rows="5" name='desc'><?php echo $category_info['desc'];?></textarea></dd>
+                  
+                  <dt>分类属性</dt>
+                  
+                        <?php if(!$attr_info):?>
+                          <dd>  
+                              <input type="button" value="+"/>
+                              <select onchange="getAttr(this)">  
+                       
+                           <option>选择类型</option>
+                           <?php foreach($type_list as $k=>$v):?>
+                           <option value="<?php echo $v['id'];?>"><?php echo $v['type_name'];?></option>
+                               <?php endforeach;?>  
+                      </select>
+                         
+                    <select  name="attr_id[]">  
+                     
+                            
+                                  
+                      </select>
+                          </dd>
+                  <?php endif;?>
+                 
+                    <?php foreach($attr_info as $k1=>$v1):?>
+                          <dd>  
+                              <input type="button" value="<?php if($k1==0) echo '+'; else  echo '-'; ?>"/>
+                              <select class='select_type' onchange="getAttr(this)" >  
+                       
+                           <option>选择类型</option>
+                           <?php foreach($type_list as $k=>$v):
+                                if($v1['type_id']==$v['id'])
+                                $selected="selected='selected'";
+                                else
+                                $selected='';
+                           ?>
+                           <option <?php echo $selected; ?> value="<?php echo $v['id'];?>"><?php echo $v['type_name'];?></option>
+                               <?php endforeach;?>  
+                      </select>
+                         
+                       <select   curId="<?php echo $v1['id'];?>" name="attr_id[]">  
+                     
+                            
+                                  
+                      </select>
+                          </dd>
+                          <?php endforeach;?>
             </dl>
          
             
@@ -38,10 +80,66 @@
 
         <div class="formBar">
             <ul>
-                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+                <li><div class="buttonActive"><div class="buttonContent"><input type="submit" value='保存'></div></div></li>
                 <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
             </ul>
         </div>
     </form>
 </div>
-
+<script type='text/javascript'>
+    //根据type_id 传来不同ID
+    
+    function getAttr(select){
+        var type_id=$(select).val();
+        var next_select=$(select).next('select');
+        var curId= next_select.attr('curId');
+        
+        $.ajax({
+            type:'get',
+            url:'__CONTROLLER__/ajaxGetAttr/type_id/'+type_id,
+            dataType:'json',
+            success:function(data){
+                 var html='<option value="">请选择属性</option>';
+                $(data).each(function(k,v){
+                    var selected='';
+                    if(curId==v.id)
+                        selected="selected='selected'";
+                    else
+                        selected='';
+               
+                       
+                      html+='<option '+selected+' value="'+v.id+'">'+v.attr_name+'</option>';
+                    
+                });
+                
+                next_select.html(html);
+            
+            }
+            
+        });
+        
+    }
+    //添加一个触发器，加载完文件就触发onchange事件
+    $('.select_type').trigger('change');
+    
+    
+   $(':button').click(function(){
+       var btn=$(this).val();
+    
+        var dd=$(this).parent();
+       if(btn=='+'){
+         
+           var dl=$(this).parent().parent();
+           var new_dd=dd.clone(true);
+           new_dd.find(':button').val('-');
+        
+           new_dd.find('select').eq(1).html('');
+           dl.append(new_dd);
+        
+           
+       }else{
+         
+           dd.remove();
+       }
+   });
+</script>

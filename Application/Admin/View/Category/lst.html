@@ -35,6 +35,11 @@
 				
 				<th >分类名称</th>
                                                                                         <th >上级分类</th>
+                                                                                         <th >价格区间</th>
+                                                                                         <th>关键字</th>
+                                                                                         <th>描述</th>
+                                                                                          <th>属性ID</th>                                                                                        
+
                                                                                           <th >全路径</th>
                                                                                             
 		    </tr>
@@ -49,6 +54,10 @@
 				
                                                                                                                 <td><?php echo str_repeat('&nbsp;',($v['level'])*3).$v['cat_name'];?></td>
                                                                                                                  <td><?php echo $v['pid'];?></td>
+                                                                                                                 <td><?php echo $v['section_price'];?></td>
+                                                                                                                 <td><?php echo $v['keyword'];?></td>
+                                                                                                                 <td><?php echo $v['desc'];?></td>
+                                                                                                                   <td><?php echo $v['attr_id'];?></td>
                                                                                                                 <td><?php echo $v['cat_path'];?></td>
 					
                                                                                                                     <td><a href="__CONTROLLER__/update/id/<?php echo $v['id']; ?>">修改</a>&nbsp;&nbsp;<a href="__CONTROLLER__/del/id/<?php echo $v['id']; ?>">删除</a></td>

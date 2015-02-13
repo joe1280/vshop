@@ -6,6 +6,11 @@ class CategoryModel extends Model{
     
         protected $_validate = array(
         array('cat_name','require','分类名称不能为空',1),
+//        array('cat_name','','分类名称已存在',1,'unique',1),     
+//          array('cat_name','','分类名称已存在',1,'unique',2),
+         array('desc','require','分类描述不能为空',1),
+          array('section_price','require','价格区间不能为空'),
+            array('keyword','require','价格区间不能为空'),
      
        
        
