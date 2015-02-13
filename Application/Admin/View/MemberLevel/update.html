@@ -1,0 +1,49 @@
+
+<div class="pageContent">
+    <form method="post" action="__SELF__">  
+
+        <div class="pageFormContent" layoutH="60">
+
+
+            <dl>
+                <dt>等级名称:</dt>
+                <dd><input type="text" class="required"  style="width:100%" name="level_name" value="<?php echo $member_level_info['level_name'];?>"/></dd>
+                
+             
+            </dl
+         
+            <dl>
+                <dt>积分上限:</dt>
+                <dd><input type="text" class="required"  style="width:100%" name="top" value="<?php echo $member_level_info['top'];?>"/></dd>
+                
+             
+            </dl>
+            
+            
+            <dl>
+                <dt>积分下限:</dt>
+                <dd><input type="text" class="required"  style="width:100%" name="bottom" value="<?php echo $member_level_info['bottom'];?>"/></dd>
+                
+             
+            </dl>
+            
+           
+        </div>
+        
+        
+            <dl>
+                <dt>折扣率:</dt>
+                <dd><input type="text" class="required"  style="width:100%" name="rate" value="<?php echo $member_level_info['rate'];?>"/></dd>
+                
+             
+            </dl>
+
+        <div class="formBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+                <li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+            </ul>
+        </div>
+    </form>
+</div>
+
