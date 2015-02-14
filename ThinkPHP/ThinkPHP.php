@@ -61,7 +61,7 @@ defined('DATA_PATH')    or define('DATA_PATH',      RUNTIME_PATH.'Data/'); // �
 defined('CACHE_PATH')   or define('CACHE_PATH',     RUNTIME_PATH.'Cache/'); // 应用模板缓存目录
 
 // 系统信息
-if(version_compare(PHP_VERSION,'5.4.0','<')) {
+if(version_compare(PHP_VERSION,'5.4.0','>')) {
     ini_set('magic_quotes_runtime',0);
     define('MAGIC_QUOTES_GPC',get_magic_quotes_gpc()?True:False);
 }else{

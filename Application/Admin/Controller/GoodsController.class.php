@@ -3,10 +3,21 @@ namespace Admin\Controller;
 use Think\Controller;
 class GoodsController extends  IndexController{
     
+    
+    //添加商品
     public function add(){
-        
+        $goodsModel=D('Goods');
                 if(IS_POST){
-                    show_bug($_POST);die;
+                   
+                            if($goodsModel->create($_POST['Goods'])){
+                                    if($goodsModel->add()){
+                                        $this->success('添加成功');
+                                            exit;
+                                    }
+                                    $this->error('添加失败');
+                            }
+                          
+                            $this->error($goodsModel->getError());
                     
                     
                 }
@@ -14,6 +25,14 @@ class GoodsController extends  IndexController{
         //取出所有分类
                 $categoryModel=D('Category');
                 $category_list=$categoryModel->catSort($categoryModel->select());
+                
+                //取出所有品牌
+                $brandModel=D('Brand');
+                $brand_list=$brandModel->select();
+                
+                //取出会员等级
+                $member_levelModel=D('MemberLevel');
+                $member_level_list=$member_levelModel->select();
                 
                 
                 //取出所有属性和和属性值 
@@ -34,6 +53,8 @@ class GoodsController extends  IndexController{
                 $this->assign(array(
                     'category_list'=>$category_list,
                     'attr_value'=>$value_arr,
+                    'brand_list'=>$brand_list,
+                    'member_level_list'=>$member_level_list,
                     
                 ));
         
