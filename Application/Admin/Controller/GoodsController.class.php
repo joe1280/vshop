@@ -34,6 +34,10 @@ class GoodsController extends  IndexController{
                 $member_levelModel=D('MemberLevel');
                 $member_level_list=$member_levelModel->select();
                 
+                //取出所有商品类型
+                $typeModel=D('Type');
+                $type_list=$typeModel->select();
+                
                 
                 //取出所有属性和和属性值 
                 $attrModel=D('Attr');
@@ -55,11 +59,20 @@ class GoodsController extends  IndexController{
                     'attr_value'=>$value_arr,
                     'brand_list'=>$brand_list,
                     'member_level_list'=>$member_level_list,
+                    'type_list'=>$type_list,
                     
                 ));
         
         
         $this->display();
+    }
+    public function ajaxGetAttr($type_id){
+        
+        //取出商品属性
+        $attrModel=D('Attr');
+        $attr_info=$attrModel->where('type_id='.$type_id)->select();
+        
+        echo json_encode($attr_info);
     }
     
 }

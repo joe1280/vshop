@@ -11,7 +11,7 @@ class GoodsModel extends Model{
         
         
     protected function _before_insert(&$data, $options) {
-       
+      
     
         //上传商品logo
             if($_FILES['o_img']['error']==0){
@@ -132,6 +132,37 @@ class GoodsModel extends Model{
                             'm_pic'=>$m_pic_path,
                             's_pic'=>$s_pic_path,
                         ));
+                }
+                
+                //处理商品属性
+                //商品属性ID
+                $goods_attr_id=I('post.goods_attr_id');
+                //属性价格
+                $attr_price=I('attr_price');
+                
+                //商品类型
+                $type_id=I('post.type_id');
+                
+                //实例化商品属性模型
+                $goods_attrModel=D('GoodsAttr');
+                
+                //遍历存进数据库
+                //先遍历商品属性
+                $i=0;
+                foreach($goods_attr_id as $k=>$v){
+                    
+                        foreach($v as $kk=>$vv){
+                                
+                                  $goods_attrModel->add(array(
+                                 'goods_id'=>$goods_id,
+                                 'attr_id'=>$k,
+                                 'attr_value'=>$vv,
+                                 'attr_price'=>$attr_price[$i],
+                            
+                        ));
+                            $i++;
+                        }
+                    
                 }
                 
                 
