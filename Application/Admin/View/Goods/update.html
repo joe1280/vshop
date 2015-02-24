@@ -8,6 +8,7 @@
 <script type="text/javascript" src="__PUBLIC__/Jquery/jquery-1.7.2.js"></script>
 </head>
 <body>
+  
 <h1>
     <span class="action-span"><a href="__GROUP__/Goods/goodsList">商品列表</a>
     </span>
@@ -32,7 +33,7 @@
             <table width="90%" id="general-table" align="center" class="setspan">
                 <tr>
                     <td class="label">商品名称：</td>
-                    <td><input type="text" name="Goods[goods_name]" value=""size="30" />
+                    <td><input type="text" name="Goods[goods_name]" value="<?php echo $goods_info['goods_name'];?>" size="30"/>
                     <span class="require-field">*</span></td>
                 </tr>
               
@@ -41,8 +42,13 @@
                     <td>
                         <select name="Goods[cat_id]">
                             <option value="0">请选择...</option>
-                          <?php foreach($category_list as $k=>$v):?>
-                          <option value="<?php echo $v['id'];?>"><?php echo $v['cat_name'];?></option>
+                          <?php foreach($category_list as $k=>$v):
+                          if($goods_info['cat_id']==$v['id'])
+                            $selected="selected='selected'";
+                            else
+                            $selected='';
+                          ?>
+                          <option <?php echo $selected;?> value="<?php echo $v['id'];?>"> <?php echo $v['cat_name'];?></option>
                            <?php endforeach;?>
                         </select>
                         <span class="require-field">*</span>
@@ -53,8 +59,13 @@
                     <td>
                         <select name="Goods[brand_id]">
                             <option value="0">请选择...</option>
-                            <?php foreach($brand_list as $k=>$v):?>
-                            <option value="<?php echo $v['id'];?>"><?php echo $v['brand_name'];?></option>
+                            <?php foreach($brand_list as $k=>$v):
+                             if($goods_info['brand_id']==$v['id'])
+                             $selected="selected='selected'";
+                             else
+                             $selected='';
+                            ?>
+                            <option <?php echo $selected;?> value="<?php echo $v['id'];?>"><?php echo $v['brand_name'];?></option>
                             <?php endforeach;?>
                         </select>
                     </td>
@@ -62,7 +73,7 @@
                 <tr>
                     <td class="label">本店售价：</td>
                     <td>
-                        <input type="text" name="Goods[shop_price]" value="0" size="20"/>
+                        <input type="text" name="Goods[shop_price]" value="<?php echo $goods_info['shop_price'];?>" size="20"/>
                         <span class="require-field">*</span>
                     </td>
                 </tr>
@@ -70,8 +81,8 @@
                 <tr>
                     <td class="label">是否上架：</td>
                     <td>
-                        <input type="radio" name="Goods[is_on_sale]" value="1"/> 是
-                        <input type="radio" name="Goods[is_on_sale]" value="0"/> 否
+                        <input type="radio" name="Goods[is_on_sale]" value="1"  <?php  if($goods_info['is_on_sale']=='1');echo 'checked';?>/> 是
+                        <input type="radio" name="Goods[is_on_sale]" value="0" <?php  if($goods_info['is_on_sale']=='0');echo 'checked';?>/> 否
                     </td>
                 </tr>
                
@@ -79,14 +90,14 @@
                 <tr>
                     <td class="label">市场售价：</td>
                     <td>
-                        <input type="text" name="Goods[market_price]" value="0" size="20" />
+                        <input type="text" name="Goods[market_price]" value="<?php echo $goods_info['market_price'];?>" size="20" />
                     </td>
                 </tr>
                 
                 <tr>
                     <td class="label">商品logo：</td>
                     <td>
-                        <input type="file" name="o_img" size="35" />
+                        <input type="file" name="o_img" size="35" /><img src="<?php echo  UP.$goods_info['m_img'];?>"/>
                     </td>
                 </tr>
             
@@ -96,7 +107,7 @@
                  <tr>
                     <td class="label">商品描述：</td>
                     <td>
-                        <textarea name="Goods[goods_desc]"></textarea>
+                        <textarea name="Goods[goods_desc]"><?php echo $goods_info['goods_desc'];?></textarea>
                         <span class="require-field">*</span>
                     </td>
                 </tr>
@@ -107,12 +118,12 @@
              <?php  foreach($member_level_list as $k=>$v):?>
                  <tr>
                      <td class="label"><?php echo $v['level_name'];?>：</td>
-                 
+                 <?php foreach($member_price_info as $kk=>$vv):?>
                     <td>
-                        <input type="text" name="MemberPrice[<?php echo $v['id'];?>][]"  size="20"/>
+                        <input type="text" name="MemberPrice[<?php echo $v['id'];?>][]"  size="20" value="<?php echo $vv['price'];?>"/>
                         <span class="require-field">*</span>
                     </td>
-                  
+                  <?php endforeach;?>
                 </tr>
              <?php endforeach;?>
             </table>
@@ -123,18 +134,45 @@
                  <tr>
                     <td class="label">商品属性-：</td>
                     <td>
-                        <select name='Goods[type_id]' onchange="getAttr(this)">
+                        <select name='type_id' onchange="getAttr(this)" <?php if($goods_info['type_id']>0) echo 'disabled="disabled"';?>>
                             <option >选择类型</option>
-                            <?php foreach($type_list as $k=>$v):?>
-                            <option value="<?php echo $v['id'];?>"><?php echo $v['type_name'];?></option>
+                            <?php foreach($type_list as $k=>$v):
+                                if($goods_info['type_id']==$v['id'])
+                                $selected='selected="selected"';
+                                else
+                                $selected='';
+                            ?>
+                            <option <?php echo $selected; ?> value="<?php echo $v['id']; ?>"  ><?php echo $v['type_name'];?></option>
                             <?php endforeach;?>
                         </select>
                         <span class="require-field">*</span>
                     </td>
                 </tr>
-                
-                <tr></tr>
-                
+                   <?php foreach($attr_list as $k=>$v):
+                   $attr_value=explode(',',$v['attr_value']);
+               
+                   ?>
+                <tr>
+                    
+                     
+                        <td><?php echo $v['attr_name'];?>:</td>
+                        <td>
+                            
+                            <select>
+                           <?php foreach($attr_value as $k1=>$v1):?>
+                            <option><?php echo $v1;?> </option>
+                           <?php endforeach;?>
+                        </select>
+                          
+                        </td> 
+                        <?php foreach($member_price_info as $k2=>$v2):?>
+                        <td><input name='MemberPrice' value="<?php echo $v2['price'];?>"/></td>
+                 
+                        <?php endforeach;?>
+                    
+                    
+                </tr>
+                   <?php endforeach;?>
             </table>
                 
                       <!--商品图片-->
@@ -176,6 +214,7 @@
     //获得多个商品属性
     function getAttr(select){
         
+       
         var type_id=$(select).val();
         var tr=$(select).parent().parent().next('tr');
         $.ajax({
@@ -265,6 +304,6 @@
         }
      
     }
-
- 
+//加载页面 解发onchange事件
+//$('select[name="type_id"]').trigger('change');
 </script>

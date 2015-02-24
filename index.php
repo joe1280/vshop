@@ -29,7 +29,7 @@ function show_bug($msg){
     echo '</pre>';
 }
 
-define('SITE','http://vmallshop.com/');
+define('SITE','http://vshop.com/');
 define('UP',SITE.'Uploads/');//定义上传图片的常量路径
 // 引入ThinkPHP入口文件
 require './ThinkPHP/ThinkPHP.php';

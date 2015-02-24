@@ -11,7 +11,8 @@ class GoodsModel extends Model{
         
         
     protected function _before_insert(&$data, $options) {
-      
+       //商品类型
+                $type_id=I('post.type_id');
     
         //上传商品logo
             if($_FILES['o_img']['error']==0){
@@ -140,8 +141,7 @@ class GoodsModel extends Model{
                 //属性价格
                 $attr_price=I('attr_price');
                 
-                //商品类型
-                $type_id=I('post.type_id');
+               
                 
                 //实例化商品属性模型
                 $goods_attrModel=D('GoodsAttr');
