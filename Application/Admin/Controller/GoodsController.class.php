@@ -11,7 +11,7 @@ class GoodsController extends  IndexController{
                    
                             if($goodsModel->create($_POST['Goods'])){
                                     if($goodsModel->add()){
-                                        $this->success('添加成功');
+                                        $this->success('添加成功',U('lst'));
                                             exit;
                                     }
                                     $this->error('添加失败');
@@ -105,10 +105,31 @@ class GoodsController extends  IndexController{
     }
     
     public function update($id){
+             //取出商品基本信息
+  
         
-        
-        //取出商品基本信息
         $goodsModel=D('Goods');
+                if($_POST){
+                        
+           
+                        if($goodsModel->create($_POST['Goods'])){
+                         
+                             $goodsModel->id=$_POST['id'];
+                         
+                       
+                                if($goodsModel->save()!==false){
+                                        $this->success('修改成功',U('lst'));
+                                        exit;
+                                }
+                                
+                                $this->error('修改失败');
+                            
+                        }
+                        $this->error($goodsModel->getError());
+                    
+                }
+        
+   
         $goods_info=$goodsModel->find($id);
         
        
@@ -126,8 +147,10 @@ class GoodsController extends  IndexController{
        //取出会员价格
        $member_priceModel=D('MemberPrice');
        //取出要所修改的会员价格
-       $member_price_info=$member_priceModel->where('id='.$id)->select();
-       
+       //$member_price_info=$member_priceModel->where('goods_id='.$id)->select();
+       $sql='select a.level_id,a.price,a.id,b.level_name from v_member_price a left join v_member_level b on a.level_id=b.id where goods_id='.$id;
+       $member_price_info=$member_priceModel->query($sql);
+
        //取商品类型
        $typeModel=D('Type');
        $type_list=$typeModel->select();
@@ -138,12 +161,16 @@ class GoodsController extends  IndexController{
        $attrModel=D('Attr');
        $attr_list=$attrModel->select();
        
-       //取商品属性
+       //联表取商品属性
        $goods_attrModel=D('GoodsAttr');
-       $goods_attr_list=$goods_attrModel->find($id);
-    
        
-    
+       $sql='select a.id,a.attr_price,a.attr_id,a.attr_value,b.attr_name,b.attr_type,b.attr_value opv from v_goods_attr a left join v_attr b on a.attr_id=b.id  where goods_id='.$id;
+      $goods_attr_info=$goods_attrModel->query($sql);
+  
+       //取出图片
+       $picModel=D('Pics');
+       $pic_info=$picModel->where('goods_id='.$id)->select();
+       
         $this->assign(array(
             'goods_info'=>$goods_info,
             'category_list'=>$category_list,
@@ -153,12 +180,94 @@ class GoodsController extends  IndexController{
             'type_list'=>$type_list,
             'attr_list'=>$attr_list,
             'type_info'=>$type_info,
-            'goods_attr_list'=>$goods_attr_list,
+            'goods_attr_info'=>$goods_attr_info,
+            'pic_info'=>$pic_info,
         ));
         
 
         $this->display();
     }
-    
+    //ajax删除图片
+    public function ajaxDelPic($picid){
+        
+        //实例化商品图片
+        $picsModel=D('Pics');
+        $pics_list=$picsModel->delete($picid);
+        if($pics_list){
+            echo '删除成功';
+        }
+    }
+    //更新商品
+   
+    //删除商品
+    public function del($id){
+        
+        $goodsModel=D('Goods');
+            if($goodsModel->delete($id)){
+                $this->success('删除成功',U('lst'));
+                exit;
+            }
+        
+        
+    }
+    //批量删除商品
+    public function mdel(){
+        
+        $goodsModel=D('Goods');
+        $ids=I('post.delid');
+        //遍历查找图片path
+     
+        //商品属性
+           $goods_attrModel=D('GoodsAttr');
+           //会员价格
+              $member_priceModel=D('MemberPrice');
+              
+               $picsModel=D('Pics');//Pic图片
+        foreach ($ids as $k=>$v){
+            $goodsModel->field('o_img,b_img,m_img,s_img')->where('id='.(int)$v)->find();
+            //批量删除图片
+                    unlink('./Uploads/'.$goodsModel->o_img);
+                    unlink('./Uploads/'.$goodsModel->b_img);
+                    unlink('./Uploads/'.$goodsModel->m_img);
+                    unlink('./Uploads/'.$goodsModel->s_img);
+                     
+                        //批量删除多个属性
+                        $goods_attrModel->where('goods_id='.(int)$v)->delete();
+                        
+                                    //批量删除会员价格
+                
+                    $member_priceModel->where('goods_id='.(int)$v)->delete();
+                    
+                                    //批量删除pic图片
+                    
+                    
+      //删除实体的商品图片
+      
+     $pics= $picsModel->where('goods_id='.$v)->select();
+        foreach($pics as $kk=>$vv){
+            
+            
+                    unlink('./Uploads/'.$vv['o_pic']);//删除原图片
+
+                   unlink('./Uploads/'.$vv['m_pic']);//删除中图片
+                    unlink('./Uploads/'.$vv['s_pic']);//删除小图片
+
+               
+            
+        }
+            $picsModel->where('goods_id='.$v)->delete();
+
+
+        }
+         
+        $ids=  implode(',',$ids);
+     
+        if($goodsModel->delete($ids)){
+            
+            $this->success('批量删除成功');
+            exit;
+        }
+        
+    }
 }
 

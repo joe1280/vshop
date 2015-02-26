@@ -29,6 +29,12 @@
     </div>
     <div id="tabbody-div">
         <form  action="__SELF__" method="post" enctype="multipart/form-data">
+            <input type='hidden' name='id' value="<?php echo I('get.id');?>"/>
+            <input type='hidden' name='o_img' value="<?php echo $goods_info['o_img'];?>"/>
+             <input type='hidden' name='b_img' value="<?php echo $goods_info['b_img'];?>"/>
+              <input type='hidden' name='m_img' value="<?php echo $goods_info['m_img'];?>"/>
+               <input type='hidden' name='s_img' value="<?php echo $goods_info['s_img'];?>"/>
+               <input type='hidden' name='goods_id'
             <!--商品基本信息-->
             <table width="90%" id="general-table" align="center" class="setspan">
                 <tr>
@@ -81,8 +87,10 @@
                 <tr>
                     <td class="label">是否上架：</td>
                     <td>
-                        <input type="radio" name="Goods[is_on_sale]" value="1"  <?php  if($goods_info['is_on_sale']=='1');echo 'checked';?>/> 是
-                        <input type="radio" name="Goods[is_on_sale]" value="0" <?php  if($goods_info['is_on_sale']=='0');echo 'checked';?>/> 否
+                     
+                        <input type="radio" name="Goods[is_on_sale]" value="1"  <?php  if($goods_info['is_on_sale']=='1') echo 'checked';?>/> 是
+                           <input type="radio" name="Goods[is_on_sale]" value="0" <?php  if($goods_info['is_on_sale']=='0') echo 'checked';?>/> 否      
+                     
                     </td>
                 </tr>
                
@@ -115,15 +123,15 @@
             </table>
               <!--会员价格-->
             <table width="90%" id="general-table" align="center" style="display: none" class="setspan">
-             <?php  foreach($member_level_list as $k=>$v):?>
+             <?php  foreach($member_price_info as $k=>$v):?>
                  <tr>
                      <td class="label"><?php echo $v['level_name'];?>：</td>
-                 <?php foreach($member_price_info as $kk=>$vv):?>
+                
                     <td>
-                        <input type="text" name="MemberPrice[<?php echo $v['id'];?>][]"  size="20" value="<?php echo $vv['price'];?>"/>
+                        <input type="text" name="MemberPrice[<?php echo $v['id'];?>][<?php echo $v['level_id']?>]"  size="20" value="<?php echo $v['price'];?>"/>
                         <span class="require-field">*</span>
                     </td>
-                  <?php endforeach;?>
+              
                 </tr>
              <?php endforeach;?>
             </table>
@@ -134,7 +142,8 @@
                  <tr>
                     <td class="label">商品属性-：</td>
                     <td>
-                        <select name='type_id' onchange="getAttr(this)" <?php if($goods_info['type_id']>0) echo 'disabled="disabled"';?>>
+                        <input type="hidden" name="del_gaid" />
+                        <select name='Goods[type_id]' onchange="getAttr(this)" <?php if($goods_info['type_id']>0) echo 'disabled="disabled"';?>>
                             <option >选择类型</option>
                             <?php foreach($type_list as $k=>$v):
                                 if($goods_info['type_id']==$v['id'])
@@ -142,33 +151,55 @@
                                 else
                                 $selected='';
                             ?>
-                            <option <?php echo $selected; ?> value="<?php echo $v['id']; ?>"  ><?php echo $v['type_name'];?></option>
+                            <option <?php echo $selected; ?> name=''  value="<?php echo $v['id']; ?>"  ><?php echo $v['type_name'];?></option>
                             <?php endforeach;?>
                         </select>
                         <span class="require-field">*</span>
                     </td>
                 </tr>
-                   <?php foreach($attr_list as $k=>$v):
-                   $attr_value=explode(',',$v['attr_value']);
-               
+                   <?php 
+                   $attr_arr=array();
+                   foreach($goods_attr_info as $k=>$v):
+                   $opv=explode(',',$v['opv']);
+            
                    ?>
                 <tr>
                     
                      
-                        <td><?php echo $v['attr_name'];?>:</td>
+                        <td><?php echo $v['attr_name'];?>:<?php if($v['attr_type']=='单选'): 
+                            if(in_array($v['attr_id'],$attr_arr)):?>
+                            <a href='#' gaid="<?php echo $v['id'];?>" onclick='addtr(this)'>[-]</a>
+                          
+                         <?php else:$attr_arr[]=$v[attr_id]?>
+                              <a href='#' onclick='addtr(this)'>[+]</a>
+                                  
+                        </td>
+               
+                            
+                      <?php endif;?>
+                        <?php endif;?>
                         <td>
                             
-                            <select>
-                           <?php foreach($attr_value as $k1=>$v1):?>
-                            <option><?php echo $v1;?> </option>
+                            <select name='goods_attr_id[<?php echo $v["attr_id"];?>][<?php echo $v["id"];?>]'>
+                           <?php foreach($opv as $k1=>$v1):
+                                if($v['attr_value']==$v1)
+                                $selected='selected="selected"';
+                                else
+                                $selected='';
+                           ?>
+                           <option <?php echo $selected;?>><?php echo $v1;?> </option>
                            <?php endforeach;?>
+                           
                         </select>
-                          
+                       
+                            
                         </td> 
-                        <?php foreach($member_price_info as $k2=>$v2):?>
-                        <td><input name='MemberPrice' value="<?php echo $v2['price'];?>"/></td>
+                        <?php if($v['attr_type']=='唯一'):?>
+                          <td><input name='goods_attr_id[<?php echo $v["attr_id"];?>][<?php echo $v["id"];?>]'  value="<?php echo $v['attr_value'];?>"/></td>
+                        <?php endif;?>
+                        <td><input name='attr_price[]' value="<?php echo $v['attr_price'];?>"/></td>
                  
-                        <?php endforeach;?>
+                        
                     
                     
                 </tr>
@@ -185,7 +216,10 @@
                               <input type='button' value="添加一张图片"  id='addpic'/>
                               
                             
-                    </td>
+                        </td>
+                     <?php foreach($pic_info as $k=>$v):?>
+                     <td><a href="#" onclick="if(confirm('确定删除吗')) delpic(this) " picid="<?php echo $v['id'];?>">[-]</a><div><img src="<?php echo UP.$v['m_pic'];?>"/></div></td>
+                     <?php endforeach;?>
                 </tr>
                 <tr>
                     
@@ -196,6 +230,7 @@
              
                 
             </table>
+               
             <div class="button-div">
                 <input type="submit" value=" 确定 " class="button"/>
                 <input type="reset" value=" 重置 " class="button" />
@@ -210,6 +245,8 @@
 </body>
 </html>
 <script type="text/javascript">
+
+
 
     //获得多个商品属性
     function getAttr(select){
@@ -292,18 +329,61 @@
       
     //增加多的tr的商品属性
     function addtr(a){
-       var aval=$(a).html();
+        
+        
+     
          var tr=$(a).parent().parent();
+         var aval=$(a).html();
         if(aval=='[+]'){
           
             var new_tr=tr.clone();
             new_tr.find('a').html('[-]');
+            var ga=new_tr.find('select').attr('name');//
+            var nga=new_tr.find('select').attr('name','new_'+ga);//新的商品属性
+            //如果商品是唯一的话
+            var ga=new_tr.find('input').attr('name');
+            
+            var nga=new_tr.find('input').attr('name','new_'+ga);
+          
             tr.after(new_tr);
         }else{
+   
+            var gaid=$(a).attr('gaid');
+                    
+            var del_gaid=$('input[name="del_gaid"]').val();
+                if(del_gaid==''){
+                        $('input[name="del_gaid"]').val(gaid);
+                     
+                }else{
+                    
+                    del_gaid+=','+gaid;
+                
+                    $('input[name="del_gaid"]').val(del_gaid);
+                }
             tr.remove();
         }
      
     }
 //加载页面 解发onchange事件
 //$('select[name="type_id"]').trigger('change');
+
+//通过ajax删除图片
+function delpic(a){
+    
+    var td=$(a).parent();
+    var picid=$(a).attr('picid');
+   $.ajax({
+       type:'get',
+       url:'__CONTROLLER__/ajaxDelPic/picid/'+picid,
+       success:(function(data){
+         
+         td.remove();
+           
+       }),
+   });
+    
+}
+
+
+
 </script>
