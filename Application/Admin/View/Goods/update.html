@@ -141,6 +141,7 @@
             <table width="90%" id="mytable" align="center" style="display: none" class="setspan">
                  <tr>
                     <td class="label">商品属性-：</td>
+                  <?php if($goods_info['type_id']!='0'):?>
                     <td>
                         <input type="hidden" name="del_gaid" />
                         <select name='Goods[type_id]' onchange="getAttr(this)" <?php if($goods_info['type_id']>0) echo 'disabled="disabled"';?>>
@@ -177,7 +178,7 @@
                
                             
                       <?php endif;?>
-                        <?php endif;?>
+                      
                         <td>
                             
                             <select name='goods_attr_id[<?php echo $v["attr_id"];?>][<?php echo $v["id"];?>]'>
@@ -194,8 +195,9 @@
                        
                             
                         </td> 
+                        <?php endif;?>
                         <?php if($v['attr_type']=='唯一'):?>
-                          <td><input name='goods_attr_id[<?php echo $v["attr_id"];?>][<?php echo $v["id"];?>]'  value="<?php echo $v['attr_value'];?>"/></td>
+                          <td><input name='goods_attr_id[<?php echo $v["attr_id"];?>][<?php echo $v["id"];?>]'  value="<?php $value=explode(',',$v['attr_value']); echo $value[0];?>"/></td>
                         <?php endif;?>
                         <td><input name='attr_price[]' value="<?php echo $v['attr_price'];?>"/></td>
                  
@@ -204,6 +206,21 @@
                     
                 </tr>
                    <?php endforeach;?>
+                   <?php endif;?>
+                  <?php if($goods_info['type_id']=='0'):?>
+                      <td>
+                        <select name='Goods[type_id]' onchange="getAttr(this)">
+                            <option >选择类型</option>
+                            <?php foreach($type_list as $k=>$v):?>
+                            <option value="<?php echo $v['id'];?>"><?php echo $v['type_name'];?></option>
+                            <?php endforeach;?>
+                        </select>
+                        <span class="require-field">*</span>
+                    </td>
+                </tr>
+                
+                <tr></tr>
+                <?php endif;?>
             </table>
                 
                       <!--商品图片-->

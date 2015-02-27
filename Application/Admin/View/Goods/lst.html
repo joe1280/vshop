@@ -64,7 +64,7 @@
                     <td><?php    if($v['is_on_sale']) echo '是';else echo '否';?></td>
 
 
-                    <td><a href="__CONTROLLER__/update/id/<?php echo $v['id']; ?>">修改</a>&nbsp;&nbsp;<a href="__CONTROLLER__/del/id/<?php echo $v['id']; ?>">删除</a></td>
+                    <td><a href="__MODULE__/GoodsNumber/add/gid/<?php echo $v['id']; ?>">库存</a>&nbsp;&nbsp;<a href="__CONTROLLER__/update/id/<?php echo $v['id']; ?>">修改</a>&nbsp;&nbsp;<a href="__CONTROLLER__/del/id/<?php echo $v['id']; ?>">删除</a></td>
                 </tr>
                 <?php endforeach;?>
 
