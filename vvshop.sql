@@ -134,15 +134,15 @@ DROP TABLE IF EXISTS `v_category`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `v_category` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `cat_name` varchar(128) NOT NULL COMMENT '名称',
-  `pid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '父ID',
-  `section_price` tinyint(4) NOT NULL DEFAULT '5' COMMENT '价格区间',
-  `keyword` varchar(300) NOT NULL DEFAULT '' COMMENT '关键字',
-  `desc` text NOT NULL COMMENT '详细描述',
-  `attr_id` varchar(150) NOT NULL DEFAULT '' COMMENT '属性ID',
-  `cat_path` varchar(300) NOT NULL DEFAULT '' COMMENT '分类路径',
+  `cat_name` varchar(128) NOT NULL COMMENT '',
+  `pid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'ID',
+  `section_price` tinyint(4) NOT NULL DEFAULT '5' COMMENT '鄹',
+  `keyword` varchar(300) NOT NULL DEFAULT '' COMMENT '丶',
+  `desc` text NOT NULL COMMENT '细',
+  `attr_id` varchar(150) NOT NULL DEFAULT '' COMMENT 'ID',
+  `cat_path` varchar(300) NOT NULL DEFAULT '' COMMENT '路',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='商品分类';
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='品';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,21 +190,21 @@ DROP TABLE IF EXISTS `v_goods`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `v_goods` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `goods_name` varchar(64) NOT NULL COMMENT '商品名称',
-  `o_img` varchar(128) NOT NULL DEFAULT '' COMMENT '商品原图片',
-  `s_img` varchar(128) NOT NULL DEFAULT '' COMMENT '商品小图',
-  `m_img` varchar(128) NOT NULL DEFAULT '' COMMENT '商品中图',
-  `b_img` varchar(128) NOT NULL DEFAULT '' COMMENT '商品大图',
-  `cat_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '商品分类ID',
-  `brand_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '商品品牌ID',
-  `shop_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '本店价',
-  `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '市场价',
-  `is_on_sale` enum('1','0') NOT NULL DEFAULT '1' COMMENT '是否上价:1 上价 0 否',
-  `goods_desc` varchar(300) NOT NULL DEFAULT '' COMMENT '商品描述',
-  `type_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '商品类型ID',
-  `rec_id` varchar(300) NOT NULL DEFAULT '' COMMENT '推荐ID',
+  `goods_name` varchar(64) NOT NULL COMMENT '品',
+  `o_img` varchar(128) NOT NULL DEFAULT '' COMMENT '品原图片',
+  `s_img` varchar(128) NOT NULL DEFAULT '' COMMENT '品小图',
+  `m_img` varchar(128) NOT NULL DEFAULT '' COMMENT '品图',
+  `b_img` varchar(128) NOT NULL DEFAULT '' COMMENT '品图',
+  `cat_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '品ID',
+  `brand_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '品品ID',
+  `shop_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '',
+  `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '谐',
+  `is_on_sale` enum('1','0') NOT NULL DEFAULT '1' COMMENT '欠霞:1 霞 0 ',
+  `goods_desc` varchar(300) NOT NULL DEFAULT '' COMMENT '品',
+  `type_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '品ID',
+  `rec_id` varchar(300) NOT NULL DEFAULT '' COMMENT '萍ID',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COMMENT='商品表';
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COMMENT='品';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
