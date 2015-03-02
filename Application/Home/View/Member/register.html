@@ -8,6 +8,9 @@
 	<link rel="stylesheet" href="__PUBLIC__/Home/style/header.css" type="text/css">
 	<link rel="stylesheet" href="__PUBLIC__/Home/style/login.css" type="text/css">
 	<link rel="stylesheet" href="__PUBLIC__/Home/style/footer.css" type="text/css">
+            <script type="text/javascript" src='__PUBLIC__/Jquery/jquery-1.7.2.js'></script>
+            
+            
 </head>
 <body>
 	<!-- 顶部导航 start -->
@@ -53,30 +56,36 @@
 						<li>
 							<label for="">用户名：</label>
 							<input type="text" class="txt" name="m_name" />
+                                                        <span></span>
 							<p>3-20位字符，可由中文、字母、数字和下划线组成</p>
 						</li>
 						<li>
 							<label for="">密码：</label>
 							<input type="password" class="txt" name="pwd" />
+                                                         <span style='color:red;'></span>
 							<p>6-20位字符，可使用字母、数字和符号的组合，不建议使用纯数字、纯字母、纯符号</p>
 						</li>
 						<li>
 							<label for="">确认密码：</label>
 							<input type="password" class="txt" name="pwd2" />
+                                                         <span style='color:red;'></span>
 							<p> <span>请再次输入密码</p>
 						</li>
                                                                                                                                                 
                                                                                                                                         <li>
 							<label for="">邮箱：</label>
 							<input type="text" class="txt" name="m_email" />
+                                                         <span style='color:red;'></span>
 							<p> <span>请输入邮箱</p>
 						</li>
                                             
 						<li class="checkcode">
 							<label for="">验证码：</label>
 							<input type="text"  name="checkcode" />
-							<img src="__PUBLIC__/Home/images/checkcode1.jpg" alt="" />
+							<img src="__CONTROLLER__/verify" alt="" onclick="this.src='__CONTROLLER__/verify?'+Math.random()"/>
+                                                        <span style='color:red;'></span>
 							<span>看不清？<a href="">换一张</a></span>
+                                                         
 						</li>
 						<li>
 							<label for="">&nbsp;</label>
@@ -132,3 +141,129 @@
 
 </body>
 </html>
+<script type='text/javascript'>
+    
+    //ajax验证用户名
+    $('input[name=m_name]').bind('keyup blur', function() {
+
+       var sp=$(this);
+        if($(this).val()==''){
+            $(this).next('span').html('用户名必须填写');
+            sp.next('span').css('color','red');
+            return false;
+        }else{
+            var user=$(this).val();
+        
+          $.ajax({
+              type:'get',
+              url:'__CONTROLLER__/ajaxCheckUser/user/'+user,
+              dataType:'json',
+              success:function(data){
+                 
+                 sp.next('span').html(data['msg']);
+                 
+          
+                sp.next('span').css('color',data['color']);
+                
+                
+                
+              },
+              
+          });
+            
+           
+        }
+    });
+    //ajax验证密码
+        $('input[name=pwd]').bind('keyup blur', function() {
+
+       var sp=$(this);
+        if($(this).val()==''){
+            $(this).next('span').html('密码必须填写');
+            sp.next('span').css('color','red');
+            return false;
+        }else{
+          var pwd=sp.val();  
+        var reg = /^[\w]{6,12}$/
+            if(pwd.match(reg)){
+                
+                 $(this).next('span').html('密码符合规则');
+                  sp.next('span').css('color','green');
+
+            }else{
+                $(this).next('span').html('密码不符合规则');
+                 sp.next('span').css('color','red');
+                return false;
+            } 
+        
+        
+         
+            
+           
+        }
+    });
+    
+    //ajax验证确认密码
+        $('input[name=pwd2]').bind('keyup blur', function() {
+
+       var sp=$(this);
+        if($(this).val()==''){
+            $(this).next('span').html('确认必须填写');
+            sp.next('span').css('color','red');
+            return false;
+        }else{
+            //确认密码由数字字母结合 长度为6到12位
+          var pwd2=sp.val();  
+        var reg = /^[\w]{6,12}$/
+            if(pwd2.match(reg)){
+                
+                 sp.next('span').html('确定密码符合规则');
+                  sp.next('span').css('color','green');
+
+            }else{
+                $(this).next('span').html('确定密码不符合规则');
+                 sp.next('span').css('color','red');
+                return false;
+            } 
+        
+                 //验证密码和确认密码是否一致
+            
+            var pwd=$('input[name=pwd]').val(); //密码
+            var pwd2=sp.val();
+                if(pwd2!=pwd){
+                    sp.next('span').html('两次密码不一致');
+                   sp.next('span').css('color','red');
+                   return false;
+                }else{
+                      sp.next('span').html('两次密码一致');
+                     sp.next('span').css('color','green');
+                }
+        
+         
+            
+           
+        }
+    });
+    //验证邮箱
+    $('input[name=m_email]').bind('keyup blur',function(){
+        
+        var sp=$(this);
+        if(sp.val()==''){
+            sp.next('span').html('邮箱必须填写');
+            sp.next('span').css('color','red');
+            return false;
+        }else{
+            //使用正则验证邮箱
+            var email=sp.val();
+           
+           var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+ 6           if(!myreg.test(email))
+ 7           {
+ 8                alert('提示\n\n请输入有效的E_mail！');
+ 9              
+11           }
+            
+        }
+    });
+    
+</script>
