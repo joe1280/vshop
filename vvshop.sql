@@ -304,9 +304,9 @@ CREATE TABLE `v_member` (
   `pwd` char(32) NOT NULL COMMENT '会员密码',
   `m_email` varchar(32) NOT NULL COMMENT '会员邮箱',
   `token` varchar(32) NOT NULL DEFAULT '' COMMENT '账号激活码',
-  `token_expire_time` int(11) NOT NULL DEFAULT '0' COMMENT '账号激活码到期时间',
-  `status` tinyint(3) unsigned DEFAULT '0' COMMENT '账号状态:0表示未激活;1表示已经激活',
-  `reg_time` int(10) unsigned DEFAULT '0' COMMENT '注册时间',
+  `token_expire_time` int(11) NOT NULL DEFAULT 0 COMMENT '账号激活码到期时间',
+  `status` tinyint(3) unsigned DEFAULT 0 COMMENT '账号状态:0表示未激活;1表示已经激活',
+  `reg_time` int(10) unsigned DEFAULT 0 COMMENT '注册时间',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='会员表';
 /*!40101 SET character_set_client = @saved_cs_client */;

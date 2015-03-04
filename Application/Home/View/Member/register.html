@@ -21,7 +21,11 @@
 			</div>
 			<div class="topnav_right fr">
 				<ul>
-					<li>您好，欢迎来到京西！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
+					<?php  if(!session('id')):?>
+					<li id="log_info">您好，欢迎来到京西！[<a href="__MODULE__/Member/login">登录</a>] [<a href="__MODULE__/Member/register">免费注册</a>] </li>
+                                                                                                                <?php else:;?>
+                                                                                                                <li id="log_info">您好，<?php echo session('m_name');?>欢迎来到京西！[<a href="__MODULE__/Member/logout">退出</a>]</li>
+                                                                                                                <?php endif;?>
 					<li class="line">|</li>
 					<li>我的订单</li>
 					<li class="line">|</li>
@@ -144,7 +148,7 @@
 <script type='text/javascript'>
     
     //ajax验证用户名
-    $('input[name=m_name]').bind('keyup blur', function() {
+    $('input[name=m_name]').bind('keyup blur focus', function() {
 
        var sp=$(this);
         if($(this).val()==''){
@@ -175,7 +179,7 @@
         }
     });
     //ajax验证密码
-        $('input[name=pwd]').bind('keyup blur', function() {
+        $('input[name=pwd]').bind('keyup blur focus', function() {
 
        var sp=$(this);
         if($(this).val()==''){
@@ -184,14 +188,14 @@
             return false;
         }else{
           var pwd=sp.val();  
-        var reg = /^[\w]{6,12}$/
+         var reg =/^[a-zA-Z]\w{5,17}$/;
             if(pwd.match(reg)){
                 
                  $(this).next('span').html('密码符合规则');
                   sp.next('span').css('color','green');
 
             }else{
-                $(this).next('span').html('密码不符合规则');
+                $(this).next('span').html('密码由数字、字母、下划线组成,确认密码长度必须6位-16位之间');
                  sp.next('span').css('color','red');
                 return false;
             } 
@@ -204,24 +208,24 @@
     });
     
     //ajax验证确认密码
-        $('input[name=pwd2]').bind('keyup blur', function() {
+        $('input[name=pwd2]').bind('keyup blur focus', function() {
 
        var sp=$(this);
         if($(this).val()==''){
-            $(this).next('span').html('确认必须填写');
+            $(this).next('span').html('确认密码必须填写');
             sp.next('span').css('color','red');
             return false;
         }else{
-            //确认密码由数字字母结合 长度为6到12位
+            //确认密码由数字字母结合 长度为6到16位
           var pwd2=sp.val();  
-        var reg = /^[\w]{6,12}$/
+          var reg =/^[a-zA-Z]\w{5,17}$/;
             if(pwd2.match(reg)){
                 
                  sp.next('span').html('确定密码符合规则');
                   sp.next('span').css('color','green');
 
             }else{
-                $(this).next('span').html('确定密码不符合规则');
+                $(this).next('span').html('确认密码由数字、字母、下划线组成,确认密码长度必须6位-16位之间');
                  sp.next('span').css('color','red');
                 return false;
             } 
@@ -245,24 +249,42 @@
         }
     });
     //验证邮箱
-    $('input[name=m_email]').bind('keyup blur',function(){
+    $('input[name=m_email]').bind('keyup blur focus',function(){
         
         var sp=$(this);
-        if(sp.val()==''){
+        var email=sp.val();
+        if(email==''){
             sp.next('span').html('邮箱必须填写');
             sp.next('span').css('color','red');
             return false;
         }else{
             //使用正则验证邮箱
-            var email=sp.val();
-           
-           var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
- 6           if(!myreg.test(email))
- 7           {
- 8                alert('提示\n\n请输入有效的E_mail！');
- 9              
-11           }
             
+           
+           var myreg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+            if(!email.match(myreg))
+           {
+               sp.next('span').html('请输入有效邮箱地址');
+               return false;
+              36
+          }else{
+                sp.next('span').html('邮箱格式正确');
+                sp.next('span').css('color','green');
+                
+                //验证邮箱是否是唯一
+                $.ajax({
+                    type:'get',
+                    url:'__CONTROLLER__/ajaxCheckEmail/email/'+email,
+                    dataType:"json",
+                    success:function(data){
+                        sp.next('span').html(data['msg']);
+                        sp.next('span').css('color',data['color']);
+                       
+                    },
+                });
+              
+          }
+               
         }
     });
     
