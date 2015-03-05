@@ -32,9 +32,13 @@ class MemberModel extends Model{
                                         //将用户名和密码存进cookies
                                                if($_POST['remember']=='1'){
                                                     $time=time()+30*24*60*60;
-                                                   
-                                                     setcookie('m_name',$user['m_name'],$time,'/','vshop.com');
-                                                     setcookie('pwd',$user['pwd'],$time,'/','vshop.com');
+                                                $key = C('DES_KEY');
+				$un = \Think\Crypt::encrypt($user['m_name'], $key);
+				$pd = \Think\Crypt::encrypt($pwd, $key);
+				$aMonth = 30 * 3600 * 24;
+				setcookie('username', $un, time() + $aMonth, '/', '.vshop.com');
+				setcookie('password', $pd, time() + $aMonth, '/', '.vshop.com');
+                                                 
                                                    
                                                    
                                                }

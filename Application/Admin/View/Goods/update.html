@@ -108,6 +108,23 @@
                         <input type="file" name="o_img" size="35" /><img src="<?php echo  UP.$goods_info['m_img'];?>"/>
                     </td>
                 </tr>
+                
+                    <tr>
+                    <td class="label">推荐位：</td>
+                  
+                    <td>
+                          <?php foreach($rec_list as $k=>$v):
+                          $rec_id=explode(',',$goods_info['rec_id']);
+                          if(in_array($v['id'],$rec_id))
+                          $check='checked="checked"';
+                          else
+                          $check='';
+                          ?>
+                          <input <?php echo $check;?> type="checkbox" name="Goods[rec_id][]" size="35"  value="<?php echo $v['id'];?>"/>  <?php echo $v['rec_name'];?>
+                        <?php endforeach;?>
+                    </td>
+                    
+                </tr>
             
             </table>
             <!--商品描述-->
@@ -235,7 +252,7 @@
                             
                         </td>
                      <?php foreach($pic_info as $k=>$v):?>
-                     <td><a href="#" onclick="if(confirm('确定删除吗')) delpic(this) " picid="<?php echo $v['id'];?>">[-]</a><div><img src="<?php echo UP.$v['m_pic'];?>"/></div></td>
+                     <td><a href="#" onclick="if(confirm('确定删除吗')) delpic(this) " picid="<?php echo $v['id'];?>">[-]</a><div><img src="<?php echo UP.$v['s_pic'];?>"/></div></td>
                      <?php endforeach;?>
                 </tr>
                 <tr>

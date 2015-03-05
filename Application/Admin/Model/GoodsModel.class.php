@@ -37,11 +37,11 @@ class GoodsModel extends Model{
                     //原图路径
                      $o_img=$info['o_img']['savepath'].$info['o_img']['savename'];
                     //小图路径
-                    $s_img=$info['o_img']['savepath'].'_s_'.$info['o_img']['savename'];
+                    $s_img=$info['o_img']['savepath'].'_img_s_'.$info['o_img']['savename'];
                     //中图路径
-                    $m_img=$info['o_img']['savepath'].'_m_'.$info['o_img']['savename'];
+                    $m_img=$info['o_img']['savepath'].'_img_m_'.$info['o_img']['savename'];
                     //生成大图
-                    $b_img=$info['o_img']['savepath'].'_b_'.$info['o_img']['savename'];
+                    $b_img=$info['o_img']['savepath'].'_img_b_'.$info['o_img']['savename'];
                     //生成缩略图
                     $image=new \Think\Image();
                     //打开原图
@@ -117,15 +117,15 @@ class GoodsModel extends Model{
                     //原图路径
                     $o_pic_path=$v['savepath'].$v['savename'];
                     //中图路径
-                    $m_pic_path=$v['savepath'].'_M_'.$v['savename'];
+                    $m_pic_path=$v['savepath'].'_pic_m_'.$v['savename'];
                     //小图片路径
-                  $s_pic_path=$v['savepath'].'_S_'.$v['savename'];
+                  $s_pic_path=$v['savepath'].'_pic_s_'.$v['savename'];
                   
                   //打开原图
                   $image->open('./Uploads/'.$o_pic_path);
                   
                   //生成中图
-                  $image->thumb(150, 150)->save('./Uploads/'.$m_pic_path);
+                  $image->thumb(350, 350)->save('./Uploads/'.$m_pic_path);
                     
                        //生成小图
                   $image->thumb(50, 50)->save('./Uploads/'.$s_pic_path);
@@ -203,11 +203,11 @@ class GoodsModel extends Model{
                     //原图路径
                      $o_img=$info['o_img']['savepath'].$info['o_img']['savename'];
                     //小图路径
-                    $s_img=$info['o_img']['savepath'].'_s_'.$info['o_img']['savename'];
+                    $s_img=$info['o_img']['savepath'].'_img_s_'.$info['o_img']['savename'];
                     //中图路径
-                    $m_img=$info['o_img']['savepath'].'_m_'.$info['o_img']['savename'];
+                    $m_img=$info['o_img']['savepath'].'_img_m_'.$info['o_img']['savename'];
                     //生成大图
-                    $b_img=$info['o_img']['savepath'].'_b_'.$info['o_img']['savename'];
+                    $b_img=$info['o_img']['savepath'].'_img_b_'.$info['o_img']['savename'];
                     //生成缩略图
                     $image=new \Think\Image();
                     //打开原图
@@ -379,15 +379,15 @@ class GoodsModel extends Model{
                     //原图路径
                     $o_pic_path=$v['savepath'].$v['savename'];
                     //中图路径
-                    $m_pic_path=$v['savepath'].'_M_'.$v['savename'];
+                    $m_pic_path=$v['savepath'].'_pic_m_'.$v['savename'];
                     //小图片路径
-                  $s_pic_path=$v['savepath'].'_S_'.$v['savename'];
+                  $s_pic_path=$v['savepath'].'_pic_s_'.$v['savename'];
                   
                   //打开原图
                   $image->open('./Uploads/'.$o_pic_path);
                   
                   //生成中图
-                  $image->thumb(150, 150)->save('./Uploads/'.$m_pic_path);
+                  $image->thumb(350, 350)->save('./Uploads/'.$m_pic_path);
                     
                        //生成小图
                   $image->thumb(50, 50)->save('./Uploads/'.$s_pic_path);

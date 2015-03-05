@@ -34,8 +34,8 @@
                             <th>全选<input type='checkbox'  id='selid'/></th>
 				<th >ID</th>
 				
-				<th >类型名称</th>
-                                                                                      
+				<th >推荐名称</th>
+                                                                                      <th >推荐类型</th>
                                                                                  
                                                                                             
 		    </tr>
@@ -43,13 +43,13 @@
 			
 		</thead>
 		<tbody>
-                                                                                                <?php foreach($type_list as $k=>$v):?>
+                                                                                                <?php foreach($recommend_list as $k=>$v):?>
 				<tr align='center'>                
                                     <td><input type='checkbox' name='delid[]' class="ids" value="<?php echo $v['id']; ?>"/></td>
                                                                                                                 <td><?php echo $v['id']; ?></td>
 				
-                                                                                                                <td><?php echo $v['type_name'];?></td>
-                                                                                                          
+                                                                                                                <td><?php echo $v['rec_name'];?></td>
+                                                                                                                   <td><?php echo $v['rec_type'];?></td>
 					
                                                                                                                     <td><a href="__CONTROLLER__/update/id/<?php echo $v['id']; ?>">修改</a>&nbsp;&nbsp;<a href="__CONTROLLER__/del/id/<?php echo $v['id']; ?>">删除</a></td>
                                                                                         </tr>

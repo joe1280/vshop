@@ -9,11 +9,19 @@ class GoodsController extends  IndexController{
         $goodsModel=D('Goods');
                 if(IS_POST){
                    
+                  
                             if($goodsModel->create($_POST['Goods'])){
+                               $rec_id=implode(',',$_POST['Goods']['rec_id']);
+                                $goodsModel->rec_id=  implode(',',$_POST['Goods']['rec_id']);
+                                //用户自增长的排序的
+                                $auth_idModel=D('AutoId');
+                                $auth_idModel->rec_id=$rec_id;
+                                $auth_idModel->add();
                                     if($goodsModel->add()){
                                         $this->success('添加成功',U('lst'));
                                             exit;
                                     }
+                              
                                     $this->error('添加失败');
                             }
                           
@@ -21,6 +29,10 @@ class GoodsController extends  IndexController{
                     
                     
                 }
+                
+                //取出推荐名称
+                $recModel=D('Recommend');
+                $rec_list=$recModel->select();
         
         //取出所有分类
                 $categoryModel=D('Category');
@@ -55,11 +67,12 @@ class GoodsController extends  IndexController{
                     
                
                 $this->assign(array(
-                    'category_list'=>$category_list,
-                    'attr_value'=>$value_arr,
-                    'brand_list'=>$brand_list,
-                    'member_level_list'=>$member_level_list,
-                    'type_list'=>$type_list,
+                    'category_list'=>$category_list, //分类列表
+                    'attr_value'=>$value_arr,  //属性值
+                    'brand_list'=>$brand_list,  //品牌
+                    'member_level_list'=>$member_level_list, //会员等级
+                    'type_list'=>$type_list, //商品类型
+                    'rec_list'=>$rec_list, //推荐名称列表
                     
                 ));
         
@@ -99,7 +112,7 @@ class GoodsController extends  IndexController{
         
         //取出所有商品
         $goodsModel=D('Goods');
-        $goodslist=$goodsModel->select();
+        $goodslist=$goodsModel->order('id desc')->select();
         $this->assign('goodslist',$goodslist);
         $this->display();
     }
@@ -116,7 +129,12 @@ class GoodsController extends  IndexController{
                          
                              $goodsModel->id=$_POST['id'];
                          
-                       
+                                       $rec_id=implode(',',$_POST['Goods']['rec_id']);
+                                $goodsModel->rec_id=  implode(',',$_POST['Goods']['rec_id']);
+                                //用户自增长的排序的
+                                $auth_idModel=D('AutoId');
+                                $auth_idModel->rec_id=$rec_id;
+                                $auth_idModel->add();
                                 if($goodsModel->save()!==false){
                                         $this->success('修改成功',U('lst'));
                                         exit;
@@ -132,6 +150,9 @@ class GoodsController extends  IndexController{
    
         $goods_info=$goodsModel->find($id);
         
+           //取出推荐名称
+                $recModel=D('Recommend');
+                $rec_list=$recModel->select();
        
         //取出所有分类
         $categoryModel=D('Category');
@@ -182,6 +203,7 @@ class GoodsController extends  IndexController{
             'type_info'=>$type_info,
             'goods_attr_info'=>$goods_attr_info,
             'pic_info'=>$pic_info,
+            'rec_list'=>$rec_list,
         ));
         
 
