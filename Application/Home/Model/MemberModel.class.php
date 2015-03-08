@@ -21,7 +21,7 @@ class MemberModel extends Model{
         //用户名验证方法
         public function checkLogin($username,$pwd){
             
-            $user=$this->field('id,m_name,pwd')->where("m_name='$username'")->find();
+            $user=$this->field('id,m_name,pwd,jifen')->where("m_name='$username'")->find();
                 
                 if($user){//如果存在用户名的话
                                     if($user['pwd']==md5($pwd)){    //用用户名和密码都正确
@@ -29,6 +29,16 @@ class MemberModel extends Model{
                                         //将用户名和密码存在入session中去
                                                  session('id',$user['id']);
                                                 session('m_name',$user['m_name']);
+                                                
+                                          //通过查找积分，查出等级
+                                             $member_level=D('MemberLevel');
+                                         
+                                                $jifen=$user['jifen'];
+                                            
+                                             $res= $member_level->where("$jifen between top and bottom")->find();
+                                             
+                                              session('level_id',$member_level->id);
+                                              session('rate',$member_level->rate);
                                         //将用户名和密码存进cookies
                                                if($_POST['remember']=='1'){
                                                     $time=time()+30*24*60*60;
@@ -38,6 +48,7 @@ class MemberModel extends Model{
 				$aMonth = 30 * 3600 * 24;
 				setcookie('username', $un, time() + $aMonth, '/', '.vshop.com');
 				setcookie('password', $pd, time() + $aMonth, '/', '.vshop.com');
+                                                                                            
                                                  
                                                    
                                                    

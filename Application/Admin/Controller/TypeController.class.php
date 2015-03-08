@@ -26,7 +26,7 @@ class TypeController extends Controller{
     public function del($id){
         
         $TypeModel=D('Type');
-        if($TypeModel->create()){
+        if($TypeModel->delete($id)){
             
             $this->success('删除成功',U('lst'));
             exit;

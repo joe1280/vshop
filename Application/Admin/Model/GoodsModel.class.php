@@ -173,7 +173,7 @@ class GoodsModel extends Model{
     }
     public function _before_update(&$data, $options) {
         
-      //show_bug($_POST);die;
+   
     
           //上传商品logo
             if($_FILES['o_img']['error']==0){
@@ -275,7 +275,8 @@ class GoodsModel extends Model{
                 
                 //遍历存进数据库
                 //先遍历商品属性
-                $i=0;
+                $i=0;  
+                
                 foreach($new_goods_attr_id as $k=>$v){
                     
                         foreach($v as $kk=>$vv){
@@ -293,7 +294,7 @@ class GoodsModel extends Model{
                     
                 }
                     
-                }
+                } 
                 //如果删除商品属性
                 $del_gaid=I('post.del_gaid');
                     if($del_gaid){

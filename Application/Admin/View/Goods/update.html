@@ -307,7 +307,7 @@
                     //把属性值转化一个数据
                        var attr_value=v.attr_value.split(',');
                     
-                          html+='<td><select name="goods_attr_id['+v.id+'][]">';
+                          html+='<td><select name="new_goods_attr_id['+v.id+'][]">';
                         for(var $i=0;$i<attr_value.length;$i++){
                             
                                        html+='<option>'+attr_value[$i]+'</option>';
@@ -322,7 +322,7 @@
                      }else{ 
                          //属性类型是唯一
                          
-                          html+='<td><input type="text" name="goods_attr_id['+v.id+'][]"  value="'+v.attr_value+'"/></td>';
+                          html+='<td><input type="text" name="new_goods_attr_id['+v.id+'][]"  value="'+v.attr_value+'"/></td>';
                      }
                     
                     

@@ -104,6 +104,7 @@ class MemberController extends Controller{
                                                              exit;
                                                         
                                                     }
+                                                            
                                                 
                                                     $this->success('登录成功',U('Index/index'));
                                                     exit;

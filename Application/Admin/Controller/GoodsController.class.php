@@ -13,6 +13,7 @@ class GoodsController extends  IndexController{
                             if($goodsModel->create($_POST['Goods'])){
                                $rec_id=implode(',',$_POST['Goods']['rec_id']);
                                 $goodsModel->rec_id=  implode(',',$_POST['Goods']['rec_id']);
+                                $goodsModel->addtime=time();
                                 //用户自增长的排序的
                                 $auth_idModel=D('AutoId');
                                 $auth_idModel->rec_id=$rec_id;
@@ -128,7 +129,7 @@ class GoodsController extends  IndexController{
                         if($goodsModel->create($_POST['Goods'])){
                          
                              $goodsModel->id=$_POST['id'];
-                         
+                           $goodsModel->addtime=time();
                                        $rec_id=implode(',',$_POST['Goods']['rec_id']);
                                 $goodsModel->rec_id=  implode(',',$_POST['Goods']['rec_id']);
                                 //用户自增长的排序的
