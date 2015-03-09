@@ -9,69 +9,50 @@
             <table width='100%'>
             
             <tr>
-                <?php foreach($ga_info as $k=>$v):?>
-                <td><?php echo $v['attr_name'];?></td>
+                <?php foreach($attrData as $k=>$v):?>
+                <td><?php echo $v[0]['attr_name'];?></td>
                   <?php endforeach;?>
                    <td>库存</td>
                    <td>操作</td>
             </tr>
-           <?php if($gn_info!=null):?>
-             <?php foreach($gn_info as $k0=>$v0):?>
+ 
+            
+                    <?php  foreach($gn_info as $k2=>$v2):
+                    $gaid=  explode(',',$v2['goods_attr_id']);
+                    
+                      ?>
             <tr>
-                <?php foreach($ga_info as $k=>$v):
-                        $attr_value=explode(',',$v['bav']);
-                ?>
+            
+                      <?php foreach($attrData as $k=>$v): ?> 
+             
                 <td id="gn">
-                    <select name="goods_attr_id[<?php echo $v['attr_id'];?>][] ">
-                    <?php foreach($attr_value as $kk=>$vv):
-                    $av_info=explode(',',$v0['goods_attr_id']);
+                    <select name="goods_attr_id[<?php echo $k;?>][] ">
+                    
+                   <?php foreach($v as $kk=>$vv):
+                     echo $vv['id'];
+                      if(in_array($vv['id'],$gaid))
+                      $selected='selected="selected"';
+                      else
+                      $selected='';
+                   ?>
+                    
+                    
+                   <option <?php echo $selected; ?> value="<?php echo $vv['id']?>"><?php echo $vv['attr_value'];?></option>
+                    <?php endforeach;?>
+                    </select>
+            
+                </td>
                 
-                    if(in_array($vv,$av_info))
-                    $selected='selected="selected"';
-                    else
-                    $selected='';
-                    
-                    ?>
-                    <option <?php echo $selected;?>><?php echo $vv;?></option>
-                     <?php endforeach;?>
-                    </select>
-            
-                </td>
-               
-                <?php endforeach;?>
-
-                <td><input type='text' name='goods_number[]'  value="<?php echo $v0['goods_number'];?>"/></td>
-            
-                <td><a href="#" gnid="<?php echo $v0['id'];?>"><?php echo  $k0==0?'[+]':'[-]' ;?></a></td>
-              
-            </tr>
               <?php endforeach;?>
-              <?php endif;?>
-           <?php if($gn_info==null):?>
-                    <tr>
-                <?php foreach($ga_info as $k=>$v):
-                        $attr_value=explode(',',$v['bav']);
-                ?>
-                <td id="gn">
-                    <select name="goods_attr_id[<?php echo $v['attr_id'];?>][] ">
-                    <?php foreach($attr_value as $kk=>$vv): ?>
-                  
-                    
-                   
-                    <option><?php echo $vv;?></option>
-                     <?php endforeach;?>
-                    </select>
-            
-                </td>
-               
-                <?php endforeach;?>
 
-                <td><input type='text' name='goods_number[]'  value="<?php echo $v0['goods_number'];?>"/></td>
+                <td><input type='text' name='goods_number[]'  value="<?php echo $v2['goods_number'];?>"/></td>
             
-                <td><a href="#" onclick="addgn(this)">[+]</a></td>
+                <td><a href="#" gnid="<?php echo $v0['id'];?>" onclick="addgn(this)"><?php echo  $k2==0?'[+]':'[-]' ;?></a></td>
               
             </tr>
-  <?php endif;?>
+           <?php endforeach;?>
+         
+         
        
             
            

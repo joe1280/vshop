@@ -49,6 +49,7 @@ $(function(){
 		$(this).addClass("selected").siblings().removeClass("selected");
 		$(this).find("input").attr({checked:"checked"});
 		//去除虚边框
+                                            getGN();
 		$(this).blur();
 	});
 
@@ -66,14 +67,36 @@ $(function(){
 	//增加
 	$("#add_num").click(function(){
 		$(".amount").val(parseInt($(".amount").val()) + 1);
+                                         var val=parseInt($(".amount").val());  //输入时的，购买数量
+                                         
+                                                var val2=parseInt($('#num').html()); //库存数量
+                                     
+                                                if(val>val2){ //如果增加的购买数量大于库存时，就让最大购买数量等于库存
+                                                  
+                                                 $(".amount").val(val2);
+                                               alert('商品库存最多只有'+val2+'件');
+                                                }
 	});
 
 	//直接输入
 	$(".amount").blur(function(){
+            
+                                                var val=parseInt($(this).val());  //输入时的，购买数量
+                                               // alert(val);
+                                                var val2=parseInt($('#num').html()); //库存数量
+                                              //  alert(val2);
+                                                if(val>val2){
+                                                    $(".amount").val(val2);
+                                                        alert('商品库存最多只有'+val2+'件');
+                                                }
+            
 		if (parseInt($(".amount").val()) < 1){
 			alert("商品数量最少为1");
 			$(this).val(1);
 		}
+                                            
+                                         
+                                           
 	});
 
 	//商品详情效果

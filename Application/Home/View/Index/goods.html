@@ -1,5 +1,5 @@
 
-<layout name="../Layout/layout"/>
+<layout name='../Layout/layout'/>
 <script type="text/javascript">
     $(function() {
         $('.jqzoom').jqzoom({
@@ -12,14 +12,7 @@
             zoomHeight: 400
         });
     })
-    $(function() { //页面自动加载
 
-        function getGp(a) {
-
-            alert(11);
-        }
-
-    });
 </script>
 <!-- 商品页面主体 start -->
 <div class="main w1210 mt10 bc">
@@ -200,9 +193,11 @@
                                 <dt><?php echo $v[0]['attr_name'];?>：</dt>
                                 <dd>
                                     <?php foreach($v as $kk=>$vv):?>
-                                    <a  onchange='getprice()'class=<?php if($kk==0) echo 'selected';?> href="javascript:;"><?php echo $vv['attr_value'];?> <input type="radio"   name="color" value="<?php echo $vv['attr_value'];?>"  /></a>
+                                    <a  class=<?php if($kk==0) echo 'selected';?> href="javascript:;"><?php echo $vv['attr_value'];?> 
+                                       <input type="radio"  class='ga' name="gaId[<?php echo $vv['attr_id'];?>]"  value="<?php echo $vv['id'];?>" <?php if($kk==0) echo  'checked="checked"'?> />
+                                    </a>
                                     <?php endforeach;?>
-                                    <input type="hidden" name="" value="" />
+                                  
                                 </dd>
                             </dl>
                         </li>
@@ -215,7 +210,7 @@
                                     <a href="javascript:;" id="reduce_num"></a>
                                     <input type="text" name="amount" value="1" class="amount"/>
                                     <a href="javascript:;" id="add_num"></a>
-                                    <span>库存:11</span>
+                                   <span id="num"></span>
                                 </dd>
                             </dl>
                         </li>
@@ -285,180 +280,92 @@
                 <div class="comment detail_div mt10">
                     <div class="comment_summary">
                         <div class="rate fl">
-                            <strong><em>90</em>%</strong> <br />
+                            <strong><em><?php echo $hao_rate;?></em>%</strong> <br />
                             <span>好评度</span>
                         </div>
                         <div class="percent fl">
                             <dl>
-                                <dt>好评（90%）</dt>
-                                <dd><div style="width:90px;"></div></dd>
+                                <dt>好评（<?php echo $hao_rate;?>%）</dt>
+                                <dd><div style="width:<?php echo $hao_rate;?>px;"></div></dd>
                             </dl>
                             <dl>
-                                <dt>中评（5%）</dt>
-                                <dd><div style="width:5px;"></div></dd>
+                                <dt>中评（<?php echo $zhong_rate;?>%）</dt>
+                                <dd><div style="width:<?php echo $zhong_rate;?>px;"></div></dd>
                             </dl>
                             <dl>
-                                <dt>差评（5%）</dt>
-                                <dd><div style="width:5px;" ></div></dd>
+                                <dt>差评（<?php echo $chai_rate;?>%）</dt>
+                                <dd><div style="width:<?php echo $chai_rate;?>px;" ></div></dd>
                             </dl>
                         </div>
                         <div class="buyer fl">
                             <dl>
                                 <dt>买家印象：</dt>
-                                <dd><span>屏幕大</span><em>(1953)</em></dd>
-                                <dd><span>外观漂亮</span><em>(786)</em></dd>
-                                <dd><span>系统流畅</span><em>(1091)</em></dd>
-                                <dd><span>功能齐全</span><em>(1109)</em></dd>
-                                <dd><span>反应快</span><em>(659)</em></dd>
-                                <dd><span>分辨率高</span><em>(824)</em></dd>
+                                <?php  foreach($impression_info as $k=>$v):?>
+                                <dd><span><?php echo $v['name'];?></span><em>(<?php echo $v['count'];?>)</em></dd>
+                                <?php endforeach;?>
+                            
                             </dl>
                         </div>
                     </div>
-
+                   <?php foreach($com_list as $k=>$v):?>         
                     <div class="comment_items mt10">
                         <div class="user_pic">
                             <dl>
                                 <dt><a href=""><img src="__PUBLIC__/Home/images/user1.gif" alt="" /></a></dt>
-                                <dd><a href="">乖乖</a></dd>
+                                <dd><a href=""><?php echo $v['m_name'];?></a></dd>
                             </dl>
                         </div>
                         <div class="item">
                             <div class="title">
-                                <span>2013-03-11 22:18</span>
-                                <strong class="star star5"></strong> <!-- star5表示5星级 start4表示4星级，以此类推 -->
+                                <span><?php echo date('Y-m-d',time());?></span>
+                                <strong class="star star<?php echo $v['score'];?>"></strong> <!-- star5表示5星级 start4表示4星级，以此类推 -->
                             </div>
                             <div class="comment_content">
                                 <dl>
-                                    <dt>心得：</dt>
-                                    <dd>东西挺好，挺满意的！</dd>
+                                    <dt>评论内容：</dt>
+                                    <dd><?php echo $v['content'];?></dd>
                                 </dl>
-                                <dl>
-                                    <dt>优点：</dt>
-                                    <dd>反应速度开，散热性能好</dd>
-                                </dl>
-                                <dl>
-                                    <dt>不足：</dt>
-                                    <dd>暂时还没发现缺点哦！</dd>
-                                </dl>
-                                <dl>
-                                    <dt>购买日期：</dt>
-                                    <dd>2013-11-24</dd>
-                                </dl>
+                  
                             </div>
-                            <div class="btns">
-                                <a href="" class="reply">回复(0)</a>
-                                <a href="" class="useful">有用(0)</a>
-                            </div>
+                         
                         </div>
                         <div class="cornor"></div>
                     </div>
-
-                    <div class="comment_items mt10">
-                        <div class="user_pic">
-                            <dl>
-                                <dt><a href=""><img src="__PUBLIC__/Home/images/user2.jpg" alt="" /></a></dt>
-                                <dd><a href="">小宝贝</a></dd>
-                            </dl>
-                        </div>
-                        <div class="item">
-                            <div class="title">
-                                <span>2013-10-01 14:10</span>
-                                <strong class="star star4"></strong> <!-- star5表示5星级 start4表示4星级，以此类推 -->
-                            </div>
-                            <div class="comment_content">
-                                <dl>
-                                    <dt>心得：</dt>
-                                    <dd>外观漂亮同，还在使用过程中。</dd>
-                                </dl>
-                                <dl>
-                                    <dt>型号：</dt>
-                                    <dd>i5 8G内存版</dd>
-                                </dl>
-                                <dl>
-                                    <dt>购买日期：</dt>
-                                    <dd>2013-11-20</dd>
-                                </dl>
-                            </div>
-                            <div class="btns">
-                                <a href="" class="reply">回复(0)</a>
-                                <a href="" class="useful">有用(0)</a>
-                            </div>
-                        </div>
-                        <div class="cornor"></div>
-                    </div>
-
-                    <div class="comment_items mt10">
-                        <div class="user_pic">
-                            <dl>
-                                <dt><a href=""><img src="__PUBLIC__/Home/images/user3.jpg" alt="" /></a></dt>
-                                <dd><a href="">天使</a></dd>
-                            </dl>
-                        </div>
-                        <div class="item">
-                            <div class="title">
-                                <span>2013-03-11 22:18</span>
-                                <strong class="star star5"></strong> <!-- star5表示5星级 start4表示4星级，以此类推 -->
-                            </div>
-                            <div class="comment_content">
-                                <dl>
-                                    <dt>心得：</dt>
-                                    <dd>挺好的，物超所值，速度挺好，WIN8用起来也不错。</dd>
-                                </dl>
-                                <dl>
-                                    <dt>优点：</dt>
-                                    <dd>散热很好，配置不错</dd>
-                                </dl>
-                                <dl>
-                                    <dt>不足：</dt>
-                                    <dd>暂时还没发现缺点哦！</dd>
-                                </dl>
-                                <dl>
-                                    <dt>购买日期：</dt>
-                                    <dd>2013-11-24</dd>
-                                </dl>
-                            </div>
-                            <div class="btns">
-                                <a href="" class="reply">回复(0)</a>
-                                <a href="" class="useful">有用(0)</a>
-                            </div>
-                        </div>
-                        <div class="cornor"></div>
-                    </div>
+                    <?php endforeach;?>
+               
 
                     <!-- 分页信息 start -->
                     <div class="page mt20">
-                        <a href="">首页</a>
-                        <a href="">上一页</a>
-                        <a href="">1</a>
-                        <a href="">2</a>
-                        <a href="" class="cur">3</a>
-                        <a href="">4</a>
-                        <a href="">5</a>
-                        <a href="">下一页</a>
-                        <a href="">尾页</a>
+                      <?php echo $page_list;?>
                     </div>
                     <!-- 分页信息 end -->
 
                     <!--  评论表单 start-->
                     <div class="comment_form mt20">
                         <form action="">
+                            <input type='hidden' name='mid' value="<?php echo session('id');?>"/>
                             <ul>
                                 <li>
                                     <label for=""> 评分：</label>
-                                    <input type="radio" name="grade"/> <strong class="star star5"></strong>
-                                    <input type="radio" name="grade"/> <strong class="star star4"></strong>
-                                    <input type="radio" name="grade"/> <strong class="star star3"></strong>
-                                    <input type="radio" name="grade"/> <strong class="star star2"></strong>
-                                    <input type="radio" name="grade"/> <strong class="star star1"></strong>
+                                    <input type="radio" name="score" class="score" value="5"/> <strong class="star star5"></strong>
+                                    <input type="radio" name="score" class="score" value="4"/> <strong class="star star4"></strong>
+                                    <input type="radio" name="score" class="score" value="3"/> <strong class="star star3"></strong>
+                                    <input type="radio" name="score" class="score" value="2"/> <strong class="star star2"></strong>
+                                    <input type="radio" name="score" class="score" value="1"/> <strong class="star star1"></strong>
+                                </li>
+                                
+                                <li>
+                                     <label for="">印象：</label>
+                                    <input type='text' name='impression'/>
                                 </li>
 
                                 <li>
                                     <label for="">评价内容：</label>
-                                    <textarea name="" id="" cols="" rows=""></textarea>
+                                    <textarea name="content" id="content" cols="" rows=""></textarea>
                                 </li>
                                 <li>
                                     <label for="">&nbsp;</label>
-                                    <input type="submit" value="提交评论"  class="comment_btn"/>										
+                                    <input type="button" value="提交评论"  class="comment_btn"/>										
                                 </li>
                             </ul>
                         </form>
@@ -506,11 +413,104 @@
 <!-- 商品页面主体 end -->
 
 <script>
-
-$('input[name="amount"]').onchange(function(){
     
-   alert(11);
+  //商品评论
+  $('input[type=button]').click(function(){
+     var mid=$('input[type=hidden]').val(); //用户SESSION ID
+            if(mid){  //只有登录的时候才可以评论
+                
+                                  var score=''
+           var content=($('#content').val()); //评论内容
+           
+         //  alert(($('input[name=score]').attr('checked')).val());
+            //var score=$('.score');
+            $('.score').each(function(k,v){
+               if($(v).attr('checked')){
+                   
+                    score=$(v).val(); //
+             
+                    
+                   
+                 
+               }
+            });
+            
+            //印象值
+            var impression=$('input[name=impression]').val();
+           
+            
+            if(!score){ //如果没有打分，返回false
+                
+                alert('必须打分');
+                return false;
+            }
+            
+            if(!content){ ///如果没有填写内容返回FALSE
+                
+                alert('必须填写内容');
+                return false;
+            }
+           
+            $.ajax({
+                type:'get',
+                url:'__CONTROLLER__/remark/score/'+score+'/content/'+content+"/gid/<?php echo I('id');?>/impression/"+impression,
+                success:function(data){
+                    alert(data);
+                },
+               
+            });
+                
+                
+            }else{
+                
+                alert('请登录后再评论');
+                location.href="__MODULE__/Member/login"
+                return false;
+                
+            }
+      
+
+       
+             
+    
+    });
+
+
+function sortNumber(a,b)
+{
+return a - b
+}
+//写一个获得得库存的函数
+function getGN(){
+ var   gaid=[];
+$('.ga').each(function(k,v){
+  
+  if($(v).attr("checked")){
+    
+      gaid.push($(v).val());
+  }
+  
+
+  
+ 
 });
+
+    gaid.sort(sortNumber) ;     
+    //把gaid变成一个字符中
+  gaid.join(',');
+  $.ajax({
+      type:'get',
+      url:"__CONTROLLER__/ajaxGetGN/gaid/"+gaid+"/gid/<?php echo I('get.id');?>",
+      success:function(data){
+          
+          $('#add_num').next('span').html(data);
+      }
+  });
+
+
+  
+}
+getGN();
 
 
 

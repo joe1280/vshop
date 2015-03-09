@@ -92,6 +92,8 @@ class IndexController extends Controller {
         public function goods($id){
         //隐藏分类
            //显示标题
+           //
+           
             //取出所有商器
             $goodsModel=D('Goods');
             //联会员价格表
@@ -104,7 +106,7 @@ class IndexController extends Controller {
            // $sql="select a.*,b.* from v_goods a left join v_member_price b on a.id=b.goods_id where a.is_on_sale='1' AND a.id=$id AND level_id='$level_id'";
             if($level_id){//如果用户登录的话
                 
-                           $goods_info= $goodsModel->alias('a')->join('left join v_member_price b on a.id=b.goods_id')->where("a.is_on_sale='1' AND a.id=$id AND level_id='$level_id'")->find();
+                           $goods_info= $goodsModel->alias('a')->field('a.*,b.level_id,b.goods_id,price')->join('left join v_member_price b on a.id=b.goods_id')->where("a.is_on_sale='1' AND a.id=$id AND level_id='$level_id'")->find();
             }else{
                 
                 //用户没有登录时
@@ -121,10 +123,18 @@ class IndexController extends Controller {
          ///  $goods_info=$goodsModel->where("is_on_sale='1' AND id=".$id)->find();
         //   show_bug($goods_info);
             //取出属性和属性值
-            $sql="select a.*,b.attr_name,attr_type from v_goods_attr a left join v_attr b on a.attr_id=b.id where goods_id=$id";
-                 $ga=$goodsModel->query($sql); //商品属性
+            
+           $sql='select a.attr_name,a.attr_value bav,a.attr_type ,b.* from v_attr a left join v_goods_attr b on a.id=b.attr_id where goods_id='.$id.' and attr_id in(select attr_id from v_goods_attr where goods_id='.$id.' group by attr_id HAVING count(*)>1'. ')';
+           
+      
+            $ga=$goodsModel->query($sql);
+            
+          
+                //商品属性
                  $rga=array();
                  $uga=array();
+                 
+            //  show_bug($ga);
                  //组成一个新三维的数姐
                  foreach($ga as $k=>$v){
                      if($v['attr_type']=='单选'){
@@ -135,21 +145,83 @@ class IndexController extends Controller {
                    
                      
                  }
+              //   show_bug($rga);
        //取出所有浏览的图片图片
-                 show_bug($uga);
+              //   show_bug($uga);
            $picsModel=D('Pics');
            $pics_info=$picsModel->where('goods_id='.$id)->select();
          
+           
+                    //取出商品评论
+            $comModel=D('Comment');
+            
+            //实化分页类
+        
+            
+            //联用户名查询用户可
+          $sql="select a.*,b.m_name from v_comment a left join v_member b on a.mid=b.id where a.gid=$id order by a.id desc";
+          //$com_list=   $comModel->where('gid='.$id)->select();
+            
+        //  $com_list=$comModel->query($sql);
+          $total=$comModel->count();
+          $offset=5;
+         $page=new \Think\Page($total,$offset);
+          
+         $page_list=$page->fpage();
+            $sql="select a.*,b.m_name from v_comment a left join v_member b on a.mid=b.id where a.gid=$id order by a.id desc ".$page->limit;
+           $com_list= $comModel->query($sql);
+          
+          //找出浏览的商品有多少分
+          $starts=$comModel->field('score')->where('gid='.$id)->order('id desc')->select();
+      
+          $count=count($starts);
+          
+          //计算好评 、中评、差评
+          $hao=0;
+          $zhong=0;
+          $chai=0;
+          
+          foreach($starts as $k=>$v){
+                    if($v['score']>=4){
+                        $hao++;
+                    }elseif($v['score']==3){
+                        $zhong++;
+                    }else{
+                        $chai++;
+                    }
+              
+          }
+    
+         //计算好评率、中评率、差评率
+            $hao_rate=  round($hao/$count,1)*100; //好评率
+            $zhong_rate=  round($zhong/$count,1)*100; //中评率
+              $chai_rate=  round($chai/$count,1)*100; //差评率
+              
+              //取出印象
+              $impressionModel=D('Impression');
+              $impression_info=$impressionModel->where('gid='.$id)->select();
+            //  show_bug($impression_info);
+         // echo mysql_error();
+          //show_bug($com_list);
             $this->assign(array(
                 'title'=>'商品页面',
                 'js'=>array('goods','jqzoom-core'),
                 'css'=>array('goods','common','jqzoom'), //商品样式
                 'goods_info'=>$goods_info, //商品基本信息
                 'pics_info'=>$pics_info,
-                'rate'=>$rate,
+                'rate'=>$rate,   //折扣率
                 'rga'=>$rga, //单选属性
                 'uga'=>$uga, //唯一属性
+                'com_list'=>$com_list ,//评论列表
+                 'hao_rate'=>$hao_rate, //好评率
+                'zhong_rate'=>$zhong_rate, //中评率
+                'chai_rate'=>$chai_rate, //差评率
+                'impression_info'=>$impression_info, //印象
+                'page_list'=>$page_list, //页码列表
+                
             ));
+            
+   
         $this->display();
     }
     
@@ -165,6 +237,71 @@ class IndexController extends Controller {
      //传递到模板去
        $this->assign('rec_goods',$rec_goods);
        $this->display();
+        
+    }
+    
+    //通过ajax获得库存
+    public function ajaxGetGN($gaid,$gid){
+        
+        $goods_numberModel=D('GoodsNumber');
+        
+       $gn =$goods_numberModel->where("goods_attr_id='$gaid' AND goods_id=$gid")->find();
+        
+     if($gn)
+            echo $goods_numberModel->goods_number;
+     else
+         echo 0;
+     
+    }
+    
+    //商品评论
+    public function remark($gid,$score,$content,$impression){
+        
+        $commentModel=D('Comment');
+        $mid=  session('id');
+        //将数据存入评论表
+        $commentModel->gid=$gid; //商品ID
+        $commentModel->score=$score;
+        $commentModel->mid=session('id');
+        $commentModel->content=$content;
+        $commentModel->addtime=time();
+        
+        $imModel=D('Impression'); //印象
+        $im_info=$imModel->where("name='$impression'")->find();
+        
+        if($im_info){
+                $imModel->where("name='$impression'")->setInc('count');
+            
+        }else{
+            
+                $imModel->add(array(
+                    'name'=>$impression,
+                    'gid'=>$gid,
+                    'count'=>1,
+                ));
+        }
+             
+        //一个用户只能评论一次
+        
+      // $com= $commentModel->where('gid='.$gid.' AND mid='.session('id'))->find();
+//    $com= $commentModel->where("gid=$gid AND mid=$mid")->find();
+//
+//                if($com){
+//                    
+//                    echo '抱歉，你已经评论过';
+//                    exit;
+//                    
+//                }else{
+                    
+                                        if($commentModel->add()){
+
+                                         echo '评论成功';
+                             }
+               // }
+        
+         
+        
+        
         
     }
 }
