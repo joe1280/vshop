@@ -38,7 +38,7 @@ class MemberModel extends Model{
                                              $res= $member_level->where("$jifen between top and bottom")->find();
                                              
                                               session('level_id',$member_level->id);
-                                              session('rate',$member_level->rate);
+                                              session('rate',$member_level->rate/100);
                                         //将用户名和密码存进cookies
                                                if($_POST['remember']=='1'){
                                                     $time=time()+30*24*60*60;
