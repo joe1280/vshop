@@ -104,10 +104,18 @@ class MemberController extends Controller{
                                                              exit;
                                                         
                                                     }
+                                                    if(session('url')){
+                                                             $this->success('登录成功',  session('url'));
+                                                                exit;
+                                                        
+                                                    }else{
+                                                        
+                                                             $this->success('登录成功',U('Index/index'));
+                                                                exit;
+                                                    }
                                                             
                                                 
-                                                    $this->success('登录成功',U('Index/index'));
-                                                    exit;
+                                               
                                  
                                            
                                       }elseif($memberModel->checkLogin($_POST['m_name'],$_POST['pwd'])==2){

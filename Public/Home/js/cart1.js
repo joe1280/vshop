@@ -24,6 +24,7 @@ $(function(){
 		});
 
 		$("#total").text(total.toFixed(2));
+                                                upGN()//  调用更新购物车数量
 	});
 
 	//增加
@@ -40,6 +41,7 @@ $(function(){
 		});
 
 		$("#total").text(total.toFixed(2));
+                                                upGN()//  调用更新购物车数量
 	});
 
 	//直接输入
@@ -58,6 +60,7 @@ $(function(){
 		});
 
 		$("#total").text(total.toFixed(2));
+                                            upGN()//  调用更新购物车数量
 
 	});
 });

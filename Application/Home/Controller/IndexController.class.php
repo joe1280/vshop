@@ -98,7 +98,7 @@ class IndexController extends Controller {
             $goodsModel=D('Goods');
             //联会员价格表
             $level_id=  session('level_id');
-            $rate=  session('rate')/100;
+            $rate=  session('rate');
            // show_bug($rate);
             
             

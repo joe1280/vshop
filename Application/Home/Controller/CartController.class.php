@@ -93,10 +93,12 @@ class CartController extends Controller{
         
             $CartModel=D('Cart');
             
-            //联商品表
-            $cart_info="select a.*,b.goods_name from v_cart  a left join v_goods_name";
-            //取出所有类型
-          $cart_list=  $CartModel->select();
+            $cart_list=$CartModel->getCartList();
+            
+            session('url',__ACTION__);
+          
+       
+        
           
           $this->assign('cart_list',$cart_list);
           $this->display();
@@ -118,6 +120,39 @@ class CartController extends Controller{
         $this->display();
     }
     
+    
+    //更新购物车的库存
+            public function ajaxUpGN($gid,$gn,$gaid){
+                    
+                $cartModel=D('Cart');
+                //取出商品总库存
+                $total_gn=D('Goods')->getGN($gid,$gaid);
+                if($gn>$total_gn){
+                      $cartModel->upGN($gid,$total_gn,$gaid);
+                   
+                        echo $total_gn;
+                }else{
+                         $cartModel->upGN($gid,$gn,$gaid);
+                       echo $total_gn;
+                }
+              
+
+            }
+            
+      //删除购物车的方式
+      public function ajaxDelCart($gid,$gaid){
+            
+          $cartModel=D('Cart');
+         $cartModel->delCart($gid,$gaid);
+            
+        
+          
+      }
+      
+      //清空购物车
+      public function ajaxClearCart(){
+          D('Cart')->clearCart();
+      }
     
     }
     

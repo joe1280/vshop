@@ -30,14 +30,16 @@ class GoodsModel extends Model{
         //如果设会员价格就用会员价格
         $mpModel=D('MemberPrice');
         $mp=$mpModel->where('goods_id='.$id.' AND level_id='.$level_id)->find();
+       
         if($mp){
-            
+           
             return $mp->price;
         }else{
-            
+           
              //如果没有设会员价格就使用折扣率*本店店
               $this->field('shop_price')->find($id);
-               return $this->shop*$rate;
+       
+               return $this->shop_price*$rate;
         }
         
        

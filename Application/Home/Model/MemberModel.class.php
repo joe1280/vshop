@@ -39,6 +39,10 @@ class MemberModel extends Model{
                                              
                                               session('level_id',$member_level->id);
                                               session('rate',$member_level->rate/100);
+                                              
+                                               //将COOKIES 的购物移进数据去
+                                               $cartModel=D('Cart');
+                                               $cartModel->moveToDb();
                                         //将用户名和密码存进cookies
                                                if($_POST['remember']=='1'){
                                                     $time=time()+30*24*60*60;

@@ -44,3 +44,4 @@
 .cart_btn .checkout:hover{ text-decoration: none; background-position: 0 -36px; color:#fff;}
 .cart_btn .continue{width: 94px; height: 36px; float: left; display: inline; line-height: 36px; text-align: center; background: url("../images/btn_continue.png") 0 0 no-repeat;}
 .cart_btn .continue:hover{text-decoration: none; background-position: 0 -36px;}
+.cart_btn .clear{width: 94px; height: 36px; float: left; display: inline; line-height: 36px; text-align: center; background: url("../images/btn_continue.png") 0 0 no-repeat;}

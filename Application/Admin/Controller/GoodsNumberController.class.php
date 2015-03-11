@@ -83,7 +83,7 @@ class GoodsNumberController extends IndexController{
             
       
             $ga_info=$attrModel->query($sql);
-                 // show_bug($attrModel->getLastSql());
+            //  show_bug($attrModel->getLastSql());
            // show_bug($gn_info);
             //传到模板去
             //show_bug($ga_info);
@@ -93,9 +93,10 @@ class GoodsNumberController extends IndexController{
                 
                 $attrData[$v['attr_id']][]=$v;
             }
-            
+        //    show_bug($attrModel->getLastSql());
+            //show_bug($gn_info);
            // show_bug($attrData);
-
+            //show_bug($attrData);die;
             //取商品库的数据
             $gn_info=$gnModel->where('goods_id='.$gid)->select();
        
