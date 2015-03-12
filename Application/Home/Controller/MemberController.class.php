@@ -106,6 +106,7 @@ class MemberController extends Controller{
                                                     }
                                                     if(session('url')){
                                                              $this->success('登录成功',  session('url'));
+                                                             session('url',null); //清空sessionurl
                                                                 exit;
                                                         
                                                     }else{

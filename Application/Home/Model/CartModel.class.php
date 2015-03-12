@@ -99,6 +99,7 @@ class CartModel extends Model{
               $goodsModel=D('Goods');
               foreach($cart_list as $k=>$v){
                      $price=$goodsModel->getMemberPrice($v['gid']); //取出会员价格
+                 
                      $g=$goodsModel->field('m_img,goods_name')->find($v['gid']);
                   $goods[]=array(
                       'id'=>$v['id'],
@@ -217,15 +218,24 @@ class CartModel extends Model{
         if(session('id')){
             $cart_list=isset($_COOKIE['cart'])?unserialize($_COOKIE['cart']):array(); // 反序化
             foreach ($cart_list as $k=>$v){   //遍历存进数据库存
-                $key=  explode('-',$k);
-                $this->add(array(
-                    'mid'=>session('id'),  //会员ID
-                    'gid'=>$key[0],  //商品ID
-                    'gaid'=>$key[1], // 商品属性ID
-                    'gastr'=>$v[0], // 商品属性字符
-                    'amount'=>$v[1],  //购买数量
+                $key=  explode('-',$k);  //$key=$gid.'-'gaid  商品ID-商品属性ID
+               //如果数据已经存在这件商品，就合并COOKIE的数据
+                $cart_info=$this->where(array('mid'=>  session('id'),'gid'=>$key[0],'gaid'=>$key[1]))->find();
+                    if($cart_info){
+                         $this->where(array('mid'=>  session('id'),'gid'=>$key[0],'gaid'=>$key[1]))->setInc('amount', $v[1]);
+                             
+                    }else{
+                        /*如果数据中没有这个商品直接插进去*/
+                                  $this->add(array(
+                                  'mid'=>session('id'),  //会员ID
+                                  'gid'=>$key[0],  //商品ID
+                                  'gaid'=>$key[1], // 商品属性ID
+                                  'gastr'=>$v[0], // 商品属性字符
+                                  'amount'=>$v[1],  //购买数量
+                   
+  
                 ));
-                
+                 }
             }
             cookie('cart',null); //清空购物车
             

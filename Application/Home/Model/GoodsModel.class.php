@@ -31,9 +31,9 @@ class GoodsModel extends Model{
         $mpModel=D('MemberPrice');
         $mp=$mpModel->where('goods_id='.$id.' AND level_id='.$level_id)->find();
        
-        if($mp){
+        if($mp&&$mp['price']!='0.00'){
            
-            return $mp->price;
+            return $mp['price'];
         }else{
            
              //如果没有设会员价格就使用折扣率*本店店

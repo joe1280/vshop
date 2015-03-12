@@ -8,7 +8,7 @@ class CartController extends Controller{
             $CartModel=D('Cart');
             if(IS_POST){
                 
-             
+          
                     if($CartModel->create()){
                            //show_bug($_POST);die;
 //                        $CartModel->mid=session('id'); //会员ID

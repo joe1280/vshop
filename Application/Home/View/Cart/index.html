@@ -103,7 +103,7 @@
 		<div class="cart_btn w990 bc mt10">
 			<a href="__APP__" class="continue">继续购物</a>
                                                                     <a href="#_" class="clear">清空购物</a>                
-			<a href="" class="checkout">结 算</a>
+			<a href="__MODULE__/Order/add" class="checkout">结 算</a>
 		</div>
 	</div>
 	<!-- 主体部分 end -->
@@ -207,9 +207,10 @@
             $.ajax({
                 type:'get',
                 url:'__CONTROLLER__/ajaxClearCart/',
-                success:function(data){
-                    alert(data);
+                success:function(){
+                    
                     tr.remove();
+                    $('#total').html(''); //清空总价格
                 }
             });
               }
